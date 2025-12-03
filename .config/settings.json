@@ -1,0 +1,132 @@
+{
+    "RootName": "Hotkeys",
+    "structure": [
+        {
+            "name": ".config",
+            "type": "Configuration",
+            "is_include": "true",
+            "children": []
+        },
+        {
+            "type": "SupportFiles",
+            "is_include": "false",
+            "children": [
+                {
+                    "type": "AHK",
+                    "is_include": "false"
+                },
+                {
+                    "type": "Icons",
+                    "is_include": "false"
+                },
+                {
+                    "type": "Images",
+                    "is_include": "false"
+                },
+                {
+                    "type": "ImageSearch",
+                    "is_include": "false"
+                },
+                {
+                    "type": "Sounds",
+                    "is_include": "false"
+                }
+            ]
+        },
+        {
+            "type": "Library",
+            "is_include": "true",
+            "children": [
+                {
+                    "type": "Core",
+                    "is_include": "true",
+                    "is_path": "true",
+                    "children": [
+                        {
+                            "type": "Classes",
+                            "is_include": "true",
+                            "is_path": "true"
+                        },
+                        {
+                            "type": "Functions",
+                            "is_include": "true",
+                            "is_path": "true"
+                        }
+                    ]
+                },
+                {
+                    "type": "GUIs",
+                    "is_include": "true",
+                    "is_path": "true",
+                    "children": [
+                        {
+                            "type": "SupportFiles",
+                            "is_include": "true",
+                            "is_path": "true"
+                        }
+                    ]
+                },
+                {
+                    "type": "Modules",
+                    "is_include": "true",
+                    "is_path": "true",
+                    "children": [
+                        {
+                            "type": "Windows",
+                            "is_include": "true",
+                            "is_path": "true",
+                            "children": [
+                                {
+                                    "type": "Classes",
+                                    "is_include": "true",
+                                    "is_path": "true"
+                                },
+                                {
+                                    "type": "Functions",
+                                    "is_include": "true",
+                                    "is_path": "true"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "AfterFx",
+                            "Active": "ahk_exe AfterFX.exe",
+                            "is_include": "true",
+                            "is_path": "true",
+                            "children": [
+                                {
+                                    "type": "Classes",
+                                    "is_include": "true",
+                                    "is_path": "true"
+                                },
+                                {
+                                    "type": "Functions",
+                                    "is_include": "true",
+                                    "is_path": "true"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "PremierePro",
+                            "Active": "ahk_exe Adobe Premiere Pro.exe",
+                            "is_include": "true",
+                            "is_path": "true",
+                            "children": [
+                                {
+                                    "type": "Classes",
+                                    "is_include": "true",
+                                    "is_path": "true"
+                                },
+                                {
+                                    "type": "Functions",
+                                    "is_include": "true",
+                                    "is_path": "true"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

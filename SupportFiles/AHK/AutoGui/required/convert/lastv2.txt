@@ -1,0 +1,313 @@
+﻿
+#Requires Autohotkey v2
+;AutoGUI creator: Alguimist autohotkey.com/boards/viewtopic.php?f=64&t=89901
+;AHKv2converter creator: github.com/mmikeww/AHK-v2-script-converter
+;EasyAutoGUI-AHKv2 github.com/samfisherirl/Easy-Auto-GUI-for-AHK-v2
+
+if A_LineFile = A_ScriptFullPath && !A_IsCompiled
+{
+	myGui := Constructor()
+	myGui.Show("w1609 h417")
+}
+
+Constructor()
+{	
+	myGui := Gui()
+	ButtonEsc := myGui.Add("Button", "x8 y8 w58 h59", "&Esc")
+	ButtonF1 := myGui.Add("Button", "x136 y8 w58 h59", "&F1")
+	ButtonF2 := myGui.Add("Button", "x200 y8 w58 h59", "&F2")
+	ButtonF3 := myGui.Add("Button", "x264 y8 w58 h59", "&F3")
+	ButtonF5 := myGui.Add("Button", "x456 y8 w58 h59", "&F5")
+	ButtonF6 := myGui.Add("Button", "x520 y8 w58 h59", "&F6")
+	ButtonF7 := myGui.Add("Button", "x584 y8 w58 h59", "&F7")
+	ButtonF8 := myGui.Add("Button", "x648 y8 w58 h59", "&F8")
+	ButtonF9 := myGui.Add("Button", "x776 y8 w58 h59", "&F9")
+	ButtonPrintScreen := myGui.Add("Button", "x1096 y8 w58 h59", "&PrintScreen")
+	ButtonF10 := myGui.Add("Button", "x840 y8 w58 h59", "&F10")
+	ButtonF11 := myGui.Add("Button", "x904 y8 w58 h59", "&F11")
+	ButtonF12 := myGui.Add("Button", "x968 y8 w58 h59", "&F12")
+	ButtonScrollLock := myGui.Add("Button", "x1160 y8 w58 h59", "&ScrollLock")
+	ButtonPause := myGui.Add("Button", "x1224 y8 w58 h59", "&Pause")
+	Button1 := myGui.Add("Button", "x72 y96 w58 h59", "&1")
+	Button := myGui.Add("Button", "x8 y96 w58 h59", "&²")
+	Button2 := myGui.Add("Button", "x136 y96 w58 h59", "&2")
+	Button3 := myGui.Add("Button", "x200 y96 w58 h59", "&3")
+	Button4 := myGui.Add("Button", "x264 y96 w58 h59", "&4")
+	Button5 := myGui.Add("Button", "x328 y96 w58 h59", "&5")
+	Button6 := myGui.Add("Button", "x392 y96 w58 h59", "&6")
+	Button7 := myGui.Add("Button", "x456 y96 w58 h59", "&7")
+	Button8 := myGui.Add("Button", "x520 y96 w58 h59", "&8")
+	Button9 := myGui.Add("Button", "x584 y96 w58 h59", "&9")
+	Button0 := myGui.Add("Button", "x648 y96 w58 h59", "0")
+	Button := myGui.Add("Button", "x712 y96 w58 h59", "&-")
+	Button := myGui.Add("Button", "x776 y96 w58 h59", "&=")
+	ButtonQ := myGui.Add("Button", "x96 y160 w58 h59", "&Q")
+	ButtonW := myGui.Add("Button", "x160 y160 w58 h59", "&W")
+	ButtonE := myGui.Add("Button", "x224 y160 w58 h59", "&E")
+	ButtonR := myGui.Add("Button", "x288 y160 w58 h59", "&R")
+	ButtonT := myGui.Add("Button", "x352 y160 w58 h59", "&T")
+	ButtonY := myGui.Add("Button", "x416 y160 w58 h59", "Y")
+	ButtonU := myGui.Add("Button", "x480 y160 w58 h59", "&U")
+	ButtonI := myGui.Add("Button", "x544 y160 w58 h59", "&I")
+	ButtonO := myGui.Add("Button", "x608 y160 w58 h59", "&O")
+	ButtonP := myGui.Add("Button", "x672 y160 w58 h59", "&P")
+	Button := myGui.Add("Button", "x736 y160 w58 h59", "&[")
+	Button := myGui.Add("Button", "x800 y160 w58 h59", "&]")
+	Button := myGui.Add("Button", "x864 y160 w161 h59", "&\")
+	ButtonBackspace := myGui.Add("Button", "x840 y96 w185 h59", "&Backspace")
+	ButtonA := myGui.Add("Button", "x120 y224 w58 h59", "&A")
+	ButtonS := myGui.Add("Button", "x184 y224 w58 h59", "&S")
+	ButtonD := myGui.Add("Button", "x248 y224 w58 h59", "&D")
+	ButtonF := myGui.Add("Button", "x312 y224 w58 h59", "&F")
+	ButtonG := myGui.Add("Button", "x376 y224 w58 h59", "&G")
+	ButtonH := myGui.Add("Button", "x440 y224 w58 h59", "&H")
+	ButtonJ := myGui.Add("Button", "x504 y224 w58 h59", "&J")
+	ButtonK := myGui.Add("Button", "x568 y224 w58 h59", "&K")
+	ButtonL := myGui.Add("Button", "x632 y224 w58 h59", "&L")
+	Button := myGui.Add("Button", "x696 y224 w58 h59", "&;")
+	Button := myGui.Add("Button", "x760 y224 w58 h59", "&,")
+	ButtonEnter := myGui.Add("Button", "x824 y224 w201 h59", "&Enter")
+	ButtonZ := myGui.Add("Button", "x144 y288 w58 h59", "&Z")
+	ButtonX := myGui.Add("Button", "x208 y288 w58 h59", "&X")
+	ButtonC := myGui.Add("Button", "x272 y288 w58 h59", "&C")
+	ButtonV := myGui.Add("Button", "x336 y288 w58 h59", "&V")
+	ButtonB := myGui.Add("Button", "x400 y288 w58 h59", "&B")
+	ButtonN := myGui.Add("Button", "x464 y288 w58 h59", "&N")
+	ButtonM := myGui.Add("Button", "x528 y288 w58 h59", "&M")
+	Button := myGui.Add("Button", "x592 y288 w58 h59", "&<")
+	Button := myGui.Add("Button", "x656 y288 w58 h59", "&>")
+	Button := myGui.Add("Button", "x720 y288 w58 h59", "&/")
+	ButtonRShift := myGui.Add("Button", "x784 y288 w241 h59", "&RShift")
+	ButtonLCtrl := myGui.Add("Button", "x8 y352 w73 h59", "&LCtrl")
+	ButtonLWin := myGui.Add("Button", "x88 y352 w73 h59", "&LWin")
+	ButtonLAlt := myGui.Add("Button", "x168 y352 w73 h59", "&LAlt")
+	ButtonF1 := myGui.Add("Button", "x248 y352 w457 h59", "&F1")
+	ButtonRAlt := myGui.Add("Button", "x712 y352 w73 h59", "&RAlt")
+	ButtonFN := myGui.Add("Button", "x792 y352 w73 h59", "&FN")
+	ButtonAppsKey := myGui.Add("Button", "x872 y352 w73 h59", "&AppsKey")
+	ButtonRCtrl := myGui.Add("Button", "x952 y352 w73 h59", "&RCtrl")
+	ButtonTab := myGui.Add("Button", "x8 y160 w81 h59", "&Tab")
+	ButtonCapsLock := myGui.Add("Button", "x8 y224 w105 h59", "&CapsLock")
+	ButtonLShift := myGui.Add("Button", "x8 y288 w129 h59", "&LShift")
+	ButtonInsert := myGui.Add("Button", "x1096 y96 w58 h59", "&Insert")
+	ButtonHome := myGui.Add("Button", "x1160 y96 w58 h59", "&Home")
+	ButtonPgUp := myGui.Add("Button", "x1224 y96 w58 h59", "&PgUp")
+	ButtonDelte := myGui.Add("Button", "x1096 y160 w58 h59", "&Delte")
+	ButtonEnd := myGui.Add("Button", "x1160 y160 w58 h59", "&End")
+	ButtonPgDn := myGui.Add("Button", "x1224 y160 w58 h59", "&PgDn")
+	ButtonLeft := myGui.Add("Button", "x1096 y352 w58 h59", "&Left")
+	ButtonDown := myGui.Add("Button", "x1160 y352 w58 h59", "&Down")
+	ButtonUp := myGui.Add("Button", "x1160 y288 w58 h59", "&Up")
+	ButtonRight := myGui.Add("Button", "x1224 y352 w58 h59", "&Right")
+	Button1 := myGui.Add("Button", "x1352 y288 w58 h59", "&1")
+	ButtonF4 := myGui.Add("Button", "x328 y8 w58 h59", "&F4")
+	Button2 := myGui.Add("Button", "x1416 y288 w58 h59", "&2")
+	Button3 := myGui.Add("Button", "x1480 y288 w58 h59", "&3")
+	Button0 := myGui.Add("Button", "x1352 y352 w121 h59", "&0")
+	Button := myGui.Add("Button", "x1480 y352 w58 h59", "&.")
+	ButtonNumpadEnter := myGui.Add("Button", "x1544 y288 w58 h123", "&NumpadEnter")
+	Button4 := myGui.Add("Button", "x1352 y224 w58 h59", "&4")
+	Button5 := myGui.Add("Button", "x1416 y224 w58 h59", "&5")
+	Button6 := myGui.Add("Button", "x1480 y224 w58 h59", "&6")
+	Button7 := myGui.Add("Button", "x1352 y160 w58 h59", "&7")
+	Button8 := myGui.Add("Button", "x1416 y160 w58 h59", "&8")
+	Button9 := myGui.Add("Button", "x1480 y160 w58 h59", "&9")
+	Button := myGui.Add("Button", "x1544 y160 w58 h123", "&+")
+	ButtonNumLock := myGui.Add("Button", "x1352 y96 w58 h59", "&NumLock")
+	Button := myGui.Add("Button", "x1416 y96 w58 h59", "&/")
+	Button := myGui.Add("Button", "x1480 y96 w58 h59", "&*")
+	Button := myGui.Add("Button", "x1544 y96 w58 h59", "&-")
+	ButtonEsc.OnEvent("Click", OnEventHandler)
+	ButtonF1.OnEvent("Click", OnEventHandler)
+	ButtonF2.OnEvent("Click", OnEventHandler)
+	ButtonF3.OnEvent("Click", OnEventHandler)
+	ButtonF5.OnEvent("Click", OnEventHandler)
+	ButtonF6.OnEvent("Click", OnEventHandler)
+	ButtonF7.OnEvent("Click", OnEventHandler)
+	ButtonF8.OnEvent("Click", OnEventHandler)
+	ButtonF9.OnEvent("Click", OnEventHandler)
+	ButtonPrintScreen.OnEvent("Click", OnEventHandler)
+	ButtonF10.OnEvent("Click", OnEventHandler)
+	ButtonF11.OnEvent("Click", OnEventHandler)
+	ButtonF12.OnEvent("Click", OnEventHandler)
+	ButtonScrollLock.OnEvent("Click", OnEventHandler)
+	ButtonPause.OnEvent("Click", OnEventHandler)
+	Button1.OnEvent("Click", OnEventHandler)
+	Button.OnEvent("Click", OnEventHandler)
+	Button2.OnEvent("Click", OnEventHandler)
+	Button3.OnEvent("Click", OnEventHandler)
+	Button4.OnEvent("Click", OnEventHandler)
+	Button5.OnEvent("Click", OnEventHandler)
+	Button6.OnEvent("Click", OnEventHandler)
+	Button7.OnEvent("Click", OnEventHandler)
+	Button8.OnEvent("Click", OnEventHandler)
+	Button9.OnEvent("Click", OnEventHandler)
+	Button0.OnEvent("Click", OnEventHandler)
+	ButtonQ.OnEvent("Click", OnEventHandler)
+	ButtonW.OnEvent("Click", OnEventHandler)
+	ButtonE.OnEvent("Click", OnEventHandler)
+	ButtonR.OnEvent("Click", OnEventHandler)
+	ButtonT.OnEvent("Click", OnEventHandler)
+	ButtonY.OnEvent("Click", OnEventHandler)
+	ButtonU.OnEvent("Click", OnEventHandler)
+	ButtonI.OnEvent("Click", OnEventHandler)
+	ButtonO.OnEvent("Click", OnEventHandler)
+	ButtonP.OnEvent("Click", OnEventHandler)
+	ButtonBackspace.OnEvent("Click", OnEventHandler)
+	ButtonA.OnEvent("Click", OnEventHandler)
+	ButtonS.OnEvent("Click", OnEventHandler)
+	ButtonD.OnEvent("Click", OnEventHandler)
+	ButtonF.OnEvent("Click", OnEventHandler)
+	ButtonG.OnEvent("Click", OnEventHandler)
+	ButtonH.OnEvent("Click", OnEventHandler)
+	ButtonJ.OnEvent("Click", OnEventHandler)
+	ButtonK.OnEvent("Click", OnEventHandler)
+	ButtonL.OnEvent("Click", OnEventHandler)
+	ButtonEnter.OnEvent("Click", OnEventHandler)
+	ButtonZ.OnEvent("Click", OnEventHandler)
+	ButtonX.OnEvent("Click", OnEventHandler)
+	ButtonC.OnEvent("Click", OnEventHandler)
+	ButtonV.OnEvent("Click", OnEventHandler)
+	ButtonB.OnEvent("Click", OnEventHandler)
+	ButtonN.OnEvent("Click", OnEventHandler)
+	ButtonM.OnEvent("Click", OnEventHandler)
+	ButtonRShift.OnEvent("Click", OnEventHandler)
+	ButtonLCtrl.OnEvent("Click", OnEventHandler)
+	ButtonLWin.OnEvent("Click", OnEventHandler)
+	ButtonLAlt.OnEvent("Click", OnEventHandler)
+	ButtonRAlt.OnEvent("Click", OnEventHandler)
+	ButtonFN.OnEvent("Click", OnEventHandler)
+	ButtonAppsKey.OnEvent("Click", OnEventHandler)
+	ButtonRCtrl.OnEvent("Click", OnEventHandler)
+	ButtonTab.OnEvent("Click", OnEventHandler)
+	ButtonCapsLock.OnEvent("Click", OnEventHandler)
+	ButtonLShift.OnEvent("Click", OnEventHandler)
+	ButtonInsert.OnEvent("Click", OnEventHandler)
+	ButtonHome.OnEvent("Click", OnEventHandler)
+	ButtonPgUp.OnEvent("Click", OnEventHandler)
+	ButtonDelte.OnEvent("Click", OnEventHandler)
+	ButtonEnd.OnEvent("Click", OnEventHandler)
+	ButtonPgDn.OnEvent("Click", OnEventHandler)
+	ButtonLeft.OnEvent("Click", OnEventHandler)
+	ButtonDown.OnEvent("Click", OnEventHandler)
+	ButtonUp.OnEvent("Click", OnEventHandler)
+	ButtonRight.OnEvent("Click", OnEventHandler)
+	ButtonF4.OnEvent("Click", OnEventHandler)
+	ButtonNumpadEnter.OnEvent("Click", OnEventHandler)
+	ButtonNumLock.OnEvent("Click", OnEventHandler)
+	myGui.OnEvent('Close', (*) => ExitApp())
+	myGui.Title := "Window"
+	
+	OnEventHandler(*)
+	{
+		ToolTip("Click! This is a sample action.`n"
+		. "Active GUI element values include:`n"  
+		. "ButtonEsc => " ButtonEsc.Text "`n" 
+		. "ButtonF1 => " ButtonF1.Text "`n" 
+		. "ButtonF2 => " ButtonF2.Text "`n" 
+		. "ButtonF3 => " ButtonF3.Text "`n" 
+		. "ButtonF5 => " ButtonF5.Text "`n" 
+		. "ButtonF6 => " ButtonF6.Text "`n" 
+		. "ButtonF7 => " ButtonF7.Text "`n" 
+		. "ButtonF8 => " ButtonF8.Text "`n" 
+		. "ButtonF9 => " ButtonF9.Text "`n" 
+		. "ButtonPrintScreen => " ButtonPrintScreen.Text "`n" 
+		. "ButtonF10 => " ButtonF10.Text "`n" 
+		. "ButtonF11 => " ButtonF11.Text "`n" 
+		. "ButtonF12 => " ButtonF12.Text "`n" 
+		. "ButtonScrollLock => " ButtonScrollLock.Text "`n" 
+		. "ButtonPause => " ButtonPause.Text "`n" 
+		. "Button1 => " Button1.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "Button2 => " Button2.Text "`n" 
+		. "Button3 => " Button3.Text "`n" 
+		. "Button4 => " Button4.Text "`n" 
+		. "Button5 => " Button5.Text "`n" 
+		. "Button6 => " Button6.Text "`n" 
+		. "Button7 => " Button7.Text "`n" 
+		. "Button8 => " Button8.Text "`n" 
+		. "Button9 => " Button9.Text "`n" 
+		. "Button0 => " Button0.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "ButtonQ => " ButtonQ.Text "`n" 
+		. "ButtonW => " ButtonW.Text "`n" 
+		. "ButtonE => " ButtonE.Text "`n" 
+		. "ButtonR => " ButtonR.Text "`n" 
+		. "ButtonT => " ButtonT.Text "`n" 
+		. "ButtonY => " ButtonY.Text "`n" 
+		. "ButtonU => " ButtonU.Text "`n" 
+		. "ButtonI => " ButtonI.Text "`n" 
+		. "ButtonO => " ButtonO.Text "`n" 
+		. "ButtonP => " ButtonP.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "ButtonBackspace => " ButtonBackspace.Text "`n" 
+		. "ButtonA => " ButtonA.Text "`n" 
+		. "ButtonS => " ButtonS.Text "`n" 
+		. "ButtonD => " ButtonD.Text "`n" 
+		. "ButtonF => " ButtonF.Text "`n" 
+		. "ButtonG => " ButtonG.Text "`n" 
+		. "ButtonH => " ButtonH.Text "`n" 
+		. "ButtonJ => " ButtonJ.Text "`n" 
+		. "ButtonK => " ButtonK.Text "`n" 
+		. "ButtonL => " ButtonL.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "ButtonEnter => " ButtonEnter.Text "`n" 
+		. "ButtonZ => " ButtonZ.Text "`n" 
+		. "ButtonX => " ButtonX.Text "`n" 
+		. "ButtonC => " ButtonC.Text "`n" 
+		. "ButtonV => " ButtonV.Text "`n" 
+		. "ButtonB => " ButtonB.Text "`n" 
+		. "ButtonN => " ButtonN.Text "`n" 
+		. "ButtonM => " ButtonM.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "ButtonRShift => " ButtonRShift.Text "`n" 
+		. "ButtonLCtrl => " ButtonLCtrl.Text "`n" 
+		. "ButtonLWin => " ButtonLWin.Text "`n" 
+		. "ButtonLAlt => " ButtonLAlt.Text "`n" 
+		. "ButtonF1 => " ButtonF1.Text "`n" 
+		. "ButtonRAlt => " ButtonRAlt.Text "`n" 
+		. "ButtonFN => " ButtonFN.Text "`n" 
+		. "ButtonAppsKey => " ButtonAppsKey.Text "`n" 
+		. "ButtonRCtrl => " ButtonRCtrl.Text "`n" 
+		. "ButtonTab => " ButtonTab.Text "`n" 
+		. "ButtonCapsLock => " ButtonCapsLock.Text "`n" 
+		. "ButtonLShift => " ButtonLShift.Text "`n" 
+		. "ButtonInsert => " ButtonInsert.Text "`n" 
+		. "ButtonHome => " ButtonHome.Text "`n" 
+		. "ButtonPgUp => " ButtonPgUp.Text "`n" 
+		. "ButtonDelte => " ButtonDelte.Text "`n" 
+		. "ButtonEnd => " ButtonEnd.Text "`n" 
+		. "ButtonPgDn => " ButtonPgDn.Text "`n" 
+		. "ButtonLeft => " ButtonLeft.Text "`n" 
+		. "ButtonDown => " ButtonDown.Text "`n" 
+		. "ButtonUp => " ButtonUp.Text "`n" 
+		. "ButtonRight => " ButtonRight.Text "`n" 
+		. "Button1 => " Button1.Text "`n" 
+		. "ButtonF4 => " ButtonF4.Text "`n" 
+		. "Button2 => " Button2.Text "`n" 
+		. "Button3 => " Button3.Text "`n" 
+		. "Button0 => " Button0.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "ButtonNumpadEnter => " ButtonNumpadEnter.Text "`n" 
+		. "Button4 => " Button4.Text "`n" 
+		. "Button5 => " Button5.Text "`n" 
+		. "Button6 => " Button6.Text "`n" 
+		. "Button7 => " Button7.Text "`n" 
+		. "Button8 => " Button8.Text "`n" 
+		. "Button9 => " Button9.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "ButtonNumLock => " ButtonNumLock.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "Button => " Button.Text "`n" 
+		. "Button => " Button.Text "`n", 77, 277)
+		SetTimer () => ToolTip(), -3000 ; tooltip timer
+	}
+	
+	return myGui
+}
