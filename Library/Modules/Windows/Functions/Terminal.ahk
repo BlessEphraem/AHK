@@ -23,34 +23,27 @@ class Terminal {
      * @param {Integer} Height - The desired height of the window.
      * @param {Integer} CheckInterval - Timer interval in ms.
      * @param {Integer} profilePath - Load from a .ps1 file.
-     */
+    **/
     init(Title, Exe, Position, Width, Height, CheckInterval, profilePath) {
-        ; Check if the terminal window already exists
+        ; 1. Enable detection of hidden windows (essential for Quake mode logic)
+        DetectHiddenWindows True 
+
+        ; Check if the window already exists based on the Title
         this.hwnd := WinExist(Title)
         
         if (!this.hwnd) {
-
+            ; Prepare the launch command
             if (ProfilePath != "") {
-                ; Explication de la commande :
-                ; 1. wt.exe ... --title "..." : Lance le terminal avec le titre.
-                ; 2. powershell.exe : L'application à lancer DANS le terminal.
-                ; 3. -NoExit : Empêche la fenêtre de se fermer après l'exécution du script.
-                ; 4. -Command ". 'chemin'" : Le point (.) signifie "Dot Source". 
-                ;    Cela charge les variables/fonctions du script dans la session actuelle.
-                
-                ; Note : Les doubles quotes ('') autour du path dans le Format() deviennent des simples quotes dans la string finale pour PowerShell.
-                RunStr := Format('{} -w 0 nt --title "{}" powershell.exe -NoExit -Command "{}"', Exe, Title, ProfilePath)
-
-            } 
-            else {
-                ; Comportement par défaut si aucun profil n'est donné
-                RunStr := Format('{} -w 0 nt -p "PowerShell" --title "{}"', Exe, Title)
+                 ; If a profile path is provided, launch PowerShell with that specific script/profile
+                 RunStr := Format('{} -w _quake nt --title "{}" powershell.exe -NoExit -Command "{}"', Exe, Title, ProfilePath)
+            } else {
+                 ; Otherwise, launch a standard PowerShell tab
+                 RunStr := Format('{} -w _quake nt -p "PowerShell" --title "{}"', Exe, Title)
             }
-
             Run(RunStr)
-
-            ; Wait for the window with the title to appear
-            this.hwnd := WinWait(Title, , 5) ; Wait max 5 seconds
+            
+            ; Wait for the window to actually appear (timeout after 5 seconds)
+            this.hwnd := WinWait(Title, , 5)
             
             if (!this.hwnd) {
                 MsgBox("Failed to detect the Windows Terminal window.")
@@ -58,14 +51,15 @@ class Terminal {
             }
         }
 
-        ; Get the primary screen size
+        ; Retrieve the current screen resolution
         MonitorWidth := A_ScreenWidth
         MonitorHeight := A_ScreenHeight
         
-        ; Calculate X and Y coordinates based on the Position parameter
+        ; Initialize X and Y coordinates
         X := 0
         Y := 0
         
+        ; Calculate X and Y based on the requested Position ID
         if (Position = 1) { ; Top-Left
             X := 0
             Y := 0
@@ -79,18 +73,27 @@ class Terminal {
             X := MonitorWidth - Width
             Y := MonitorHeight - Height
         } else {
-            ; Invalid value, default to Bottom-Right
-            X := MonitorWidth - Width
+            ; Default fallback: Bottom-Left (3)
+            X := 0
             Y := MonitorHeight - Height
         }
 
-        ; Position and show the window
+        ; 2. Ensure the window is actually visible
         WinShow "ahk_id " this.hwnd
+        
+        ; If using Quake mode, WinRestore helps if the window was previously minimized
+        if (WinGetMinMax("ahk_id " this.hwnd) = -1) {
+            WinRestore "ahk_id " this.hwnd
+        }
+
+        ; Move and resize the window using the calculated X/Y coordinates
         WinMove X, Y, Width, Height, "ahk_id " this.hwnd
+        
+        ; Force the window to stay on top of others and give it focus
         WinSetAlwaysOnTop True, "ahk_id " this.hwnd
         WinActivate "ahk_id " this.hwnd
 
-        ; Start monitoring the focus
+        ; Start the timer to monitor window focus (calls the 'Watch' method)
         SetTimer this.Watch.Bind(this), CheckInterval
     }
 

@@ -165,15 +165,8 @@ Appskey::{
 #&::Application.Window(Application_Class.Arc.winTitle, Application_Class.Arc.path)
 #é::Application.Window(Application_Class.Explorer.winClass, Application_Class.Explorer.path)
 #"::Application.Window(Application_Class.Discord.winTitle, Application_Class.Discord.path)
-#'::Application.Window(Application_Class.Code.winTitle, Application_Class.Code.path)
+#'::Application.Window(Application_Class.Codium.winTitle, Application_Class.Codium.path)
 #(::Application.Window(Application_Class.Obsidian.winTitle, Application_Class.Obsidian.path)
-
-;Tab & &::Application.Window(Application_Class.PremierePro.winTitle, Application_Class.PremierePro.path)
-;Tab & é::Application.Window(Application_Class.AfterFx.winTitle, Application_Class.AfterFx.path)
-;Tab & "::Application.Window(Application_Class.Photoshop.winTitle, Application_Class.Photoshop.path)
-;Tab & '::Application.Window(Application_Class.Illustrator.winTitle, Application_Class.Illustrator.path)
-;Tab & (::Application.Window(Application_Class.Audition.winTitle, Application_Class.Audition.path)
-;Tab & -::Application.Window(Application_Class.MediaEncoder.winTitle, Application_Class.MediaEncoder.path)
 
 ;Tab::Tab;Important, if you delete that line, the above hotkeys will over-ride the default "{Tab}" button
 ;and doing like "{Alt} + {Tab}" will not work anymore.
@@ -184,7 +177,7 @@ Appskey::{
 }
 
 #²::{
-    Terminal("Deepr Terminal", "wt.exe", 3, 1200, 800, 300, "Z:\Scripts\.config\powershell_profile.ps1")
+    Terminal("Deepr Terminal", "wt.exe", 3, 1200, 800, 300, "C:\Users\" . A_UserName . "\.config\powershell\powershell_profile.ps1")
     GUI_Debug.ReturnDebug "{Win} + {²}", "Terminal() => Run/Focus Deepr Terminal", true
 }
 
@@ -401,7 +394,7 @@ F24::{
             *************************************************************************************/
 
 Media_Prev::{
-    Volume.Change("ChangeAppVolume", "msedge.exe", -0.02)
+    Volume.Change("ChangeAppVolume", "Arc.exe", -0.02)
     GUI_Debug.ReturnDebug "{PadSmallWheel1 Left} => {Media_Prev}", "Volume.Change() => Edge -2%", true
 }
 
@@ -413,16 +406,16 @@ Media_Play_Pause::{
     ; Mise à jour facultative de la GUI de débogage (Debug_Gui)
     if (IsClosed) {
     ; Le Toggle a fermé la fenêtre.
-        GUI_Debug.ReturnDebug "{PadBigWheel2 Pressed} => " Button, "Volume.SndVol.Init() => SndVol Ended", true
+        GUI_Debug.ReturnDebug "{PadSmallWheel1 Pressed} => " Button, "Volume.SndVol.Init() => SndVol Ended", true
     } else {
     ; Le Toggle a lancé la fenêtre.
-        GUI_Debug.ReturnDebug "{PadBigWheel2 Pressed} => " Button, "Volume.SndVol.Init() => SndVol Started", true
+        GUI_Debug.ReturnDebug "{PadSmallWheel1 Pressed} => " Button, "Volume.SndVol.Init() => SndVol Started", true
     }
 }
 
 Media_Next::{
 
-    Volume.Change("ChangeAppVolume", "msedge.exe", +0.02)
+    Volume.Change("ChangeAppVolume", "Arc.exe", +0.02)
 
     GUI_Debug.ReturnDebug "{PadSmallWheel1 Right} => {Media_Next}", "Volume.Change() => Edge +2%", true
 }
@@ -437,7 +430,7 @@ Browser_Back::{
 
 Browser_Stop::{
     SendInput("{Browser_Stop}")
-    GUI_Debug.ReturnDebug "{PadBigWheel Pressed} => {Browser_Stop}", "SendInput() => {Browser_Stop}", true
+    GUI_Debug.ReturnDebug "{PadSmallWheel2 Pressed} => {Browser_Stop}", "SendInput() => {Browser_Stop}", true
 }
 
 Browser_Forward::{
@@ -455,7 +448,7 @@ Volume_Down::{
 
 Volume_Mute::{
     Send("{Media_Play_Pause}")
-    GUI_Debug.ReturnDebug "{PadSmallWheel1 Pressed} => {Volume_Mute}", "SendInput() => {Media_Play_Pause}", true
+    GUI_Debug.ReturnDebug "{PadBigWheel Pressed} => {Volume_Mute}", "SendInput() => {Media_Play_Pause}", true
 }
 
 Volume_Up::{

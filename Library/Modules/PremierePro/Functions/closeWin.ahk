@@ -3,7 +3,7 @@
 CloseWin() {
     ClassNN := WinGetClass("A")
     if ClassNN = "Premiere Pro"
-        Exit
+        return
     Else
         WinClose("A")
 }

@@ -13,7 +13,6 @@ class Application_Class {
         path: "C:\Program Files\OneCommander\OneCommander.exe"
     }
 
-
     static PremierePro := {
         winTitle: "ahk_exe Adobe Premiere Pro.exe",
         winClass: "ahk_class Premiere Pro",
@@ -82,6 +81,11 @@ class Application_Class {
     static Code := {
         winTitle: "ahk_exe Code.exe",
         path: "C:\Users\Ephraem\AppData\Local\Programs\Microsoft VS Code\Code.exe"
+    }
+
+    static Codium := {
+        winTitle: "ahk_exe VSCodium.exe",
+        path: "C:\Program Files\VSCodium\VSCodium.exe"
     }
 
     static Voicemeeter := {
