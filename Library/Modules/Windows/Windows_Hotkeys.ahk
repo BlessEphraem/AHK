@@ -3,6 +3,7 @@
                                                 @README
 **************************************************************************************************************
 *************************************************************************************************************/
+
 /**
  * Some windows default hotkey are awfull and useless. Like if you do in this right order :
  * {LWin} + {LAlt} + {LShift} + {LCtrl}, it will open "https://m365.cloud.microsoft/?from=OfficeKey"
@@ -19,7 +20,7 @@
 
 /*************************************************************************************************************
 **************************************************************************************************************
-                                                    @MOUSE
+                                                  @MOUSE
 **************************************************************************************************************
 *************************************************************************************************************/
 
@@ -32,8 +33,6 @@
     Window.Resize "MButton"
     GUI_Debug.ReturnDebug "{Alt} + {MButton}", "WindowResizer()", true
 }
-
-
 
 ;@_WheelLeft
 F13::{
@@ -153,9 +152,6 @@ Appskey::{
     GUI_Debug.ReturnDebug "{MXGesturePress} := {AppsKey}", Result, true
 }
 
-; eager-focus
-; focus the first managed window matching the given exe
-
 /*************************************************************************************************************
 **************************************************************************************************************
                                                     @KEYBOARD
@@ -167,9 +163,6 @@ Appskey::{
 #"::Application.Window(Application_Class.Discord.winTitle, Application_Class.Discord.path)
 #'::Application.Window(Application_Class.Codium.winTitle, Application_Class.Codium.path)
 #(::Application.Window(Application_Class.Obsidian.winTitle, Application_Class.Obsidian.path)
-
-;Tab::Tab;Important, if you delete that line, the above hotkeys will over-ride the default "{Tab}" button
-;and doing like "{Alt} + {Tab}" will not work anymore.
 
 #space::{
     Language.Switch("fr", "en")
