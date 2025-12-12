@@ -2,9 +2,10 @@
 
 #SingleInstance force
 Persistent
-InstallKeybdHook
-InstallMouseHook
-#UseHook
+KeyHistory 500
+InstallKeybdHook true
+InstallMouseHook true
+#UseHook true
 SendMode "Input"
 /*
     Very important too, we need a better control of our computer and input, "InstallKeybdHook" il really needed

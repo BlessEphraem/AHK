@@ -41,7 +41,7 @@ Need to do a "Double Value Copy/Paste" func for pasting double values (ex: Motio
     TraySetIcon(A_Path.SupportFiles.Icons "\deepr_Icon.png")
 
     if (PID := !ProcessExist("komorebi.exe"))
-        Komorebic("start", &Result)
+        CMD("komorebic start")
     
     #ESC::Run '*RunAs "' A_ScriptDir "\Launcher.ahk" '" /restart "' 
 
@@ -55,6 +55,7 @@ Need to do a "Double Value Copy/Paste" func for pasting double values (ex: Motio
     g_AppsToPin := [
     "ahk_class ApplicationFrameWindow",
     "ahk_class CabinetWClass",
+    "ahk_class PLUGPLUG_UI_NATIVE_WINDOW_CLASS_NAME",
     Application_Class.MediaEncoder.winTitle
     ]
 
@@ -68,9 +69,7 @@ Need to do a "Double Value Copy/Paste" func for pasting double values (ex: Motio
     SetTimer(WatchError, 300)
     SetTimer((*) => WatchApp(g_AppsToPin, ), 300)
     SetTimer((*) => WatchChildApp(Application_Class.PremierePro.winTitle, g_childAppsToPin), 300)
-
-   
-
+ 
 ;SetTimer((*) => RandomFunctions() , 1000)
 
 /***********************************************************************************
@@ -80,8 +79,3 @@ Need to do a "Double Value Copy/Paste" func for pasting double values (ex: Motio
     GUI_Debug.Init()
     SetTimer((*) => GUI_Debug.Update() , 100) ; Check every 100 ms
     GUI_SideNote.Init()
-
-
-
-
-

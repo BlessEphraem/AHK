@@ -57,7 +57,7 @@ ApplyPreset(ClosePanel := false) {
     MouseMove (coords.x_screen + w // 2), (coords.y_screen + h // 2)
     
     ; Confine the mouse cursor to the boundaries of the Effects panel during the selection phase.
-    ClipCursor({x1: coords.x_screen, y1: coords.y_screen, x2: coords.x_screen + w, y2: coords.y_screen + h})
+    Mouse.ClipCursor({x1: coords.x_screen, y1: coords.y_screen, x2: coords.x_screen + w, y2: coords.y_screen + h})
 
     ; --- WAIT FOR USER INTERACTION (LButton Click or Esc) ---
     Loop {
@@ -66,7 +66,7 @@ ApplyPreset(ClosePanel := false) {
             break
         ; Exit the function cleanly if the Escape key is pressed (user cancels).
         if GetKeyState("Esc") {
-            ClipCursor() ; Release the cursor lock.
+            Mouse.ClipCursor() ; Release the cursor lock.
             MouseMove mStart_X, mStart_Y ; Restore original mouse position.
             Exit
         }
@@ -74,7 +74,7 @@ ApplyPreset(ClosePanel := false) {
     }
 
     ; Release the cursor confinement once the user has started the drag.
-    ClipCursor()
+    Mouse.ClipCursor()
 
     ; Block user input to ensure the subsequent drag/drop movement is precise and uninterrupted.
     BlockInput "On" 
