@@ -14,7 +14,6 @@ SetWorkingDir A_ScriptDir
 class Files {
     static mainPy := "main.py"
     static outputPath := "paths.ahk" 
-    
     static outputIncludes := ".includes.ahk" 
 }
 
@@ -215,22 +214,9 @@ class Launcher {
         
         Launcher.Log.Write("INFO", "Build script finished with Exit Code: " exitCode)
         if (exitCode = 0) {
-            try {
-                
-                FileRead(OutputPaths) ; Reading the raw content of the INI file
-                
-                successMsg := "Configuration Successful!" . "`n`nThe Python script finished successfully and generated 'path.ini'."
-                Launcher.Log.Write("DONE", successMsg)
-                return
-            } catch as e {
-                errorMsg := "The Python script succeeded (Code: 0), but the file " OutputPaths " could not be read."
-                . "`n`nError: " e.Message
-                ; Added instruction to check log file
-                msgBoxText := errorMsg . "`n`nCheck the log file: " . Launcher.Log.LogFile
-                Launcher.Log.Write("FATAL_ERROR", errorMsg)
-                MsgBox Launcher.Log.FatErr[1] msgBoxText, Launcher.Log.FatErr[2], Launcher.Log.FatErr[3]
-                ExitApp
-            }
+            successMsg := "Configuration Successful!" . "`n`nThe Python script finished successfully and generated 'path.ini'."
+            Launcher.Log.Write("DONE", successMsg)
+            return
         } else {
             errorMsg := "Configuration Failure!" . "`n`nThe Python script encountered an error or was canceled by the user. Exit code: " exitCode
             . "`nThe operation is canceled."
