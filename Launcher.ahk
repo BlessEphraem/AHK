@@ -19,7 +19,7 @@ class Files {
 }
 
 ; If one of thoses return false = Fatal Error
-Launcher.Log.Toggle := true
+Launcher.Log.Toggle := false
 Launcher.Check.IsAdmin
 Launcher.Check.Python(&pythonCmd)
 Launcher.Check.mainPy(A_ScriptDir, Files.mainPy)
