@@ -3,7 +3,7 @@
  * @description A fully modulable ahk script with per application hotkeys layering.
  * @author Ephraem
  * @date 2021/05/10
- * @version 6.0 BETA
+ * @version 7
  * 
 /**********************************************************************************/
 /***********************************************************************************
@@ -25,7 +25,7 @@ Need to do a "Double Value Copy/Paste" func for pasting double values (ex: Motio
                                         @Init
 ***********************************************************************************/
 
-#include ".config\.includes.ahk"
+#include "C:\Users\%A_UserName%\.config\AHK\.includes.ahk"
 
     full_command_line := DllCall("GetCommandLine", "str")
 

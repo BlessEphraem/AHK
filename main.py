@@ -12,6 +12,10 @@ from tkinter import (
     Tk, messagebox
 )
 
+# --- GLOBAL PATH CONSTANT ---
+# C:\Users\USERNAME on Windows, /home/username on Linux
+USER_HOME = os.path.join(os.path.expanduser("~"), ".config")
+
 # --- CONFIGURATION ---
 SETTINGS_FILE = "settings.json"
 LOG_FILE = "mainpy.log"
@@ -25,7 +29,7 @@ AHK_VAR_SETTINGS = "path_settings"
 AHK_VAR_PYTHON_CMD = "cmd_python"
 AHK_VAR_FINAL_SCRIPT = "StartFinalScript"
 # The 'type' of item in settings.json to search for to find the config path
-json_keyConfig = "Configuration"
+# json_keyConfig = "Configuration"
 
 
 
@@ -204,22 +208,7 @@ def load_settings_json(settings_json_path):
         logging.error(f"Error reading settings.json file: {e}")
         return None
 
-def find_config_dir_path(settings, json_keyConfig_name):
-    """
-    Searches for the configuration directory path (relative to CWD) within the 
-    settings.json structure, using 'name' or 'type'.
-    """
-    for item in settings.get('structure', []):
-        if item.get('type') == json_keyConfig_name:
-            # The 'type' key remains the logical reference to find the element.
-            # The relative path is determined by get_folder_name.
-            folder_name = get_folder_name(item) 
-            if folder_name:
-                return folder_name
-            else:
-                # If neither 'name' nor 'type' is found, this is an error.
-                return None 
-    return None
+
 
 def get_expected_paths(structure, base_path="."):
     """
@@ -284,7 +273,7 @@ def compare_structure(expected_paths, is_initial_run):
     
     return missing_folders
 
-def create_structure(settings):
+def create_structure(settings, base_path):
     """
     Creates folders based on the structure defined in settings.json.
     Creation is unconditional regarding 'is_include', as the folder
@@ -292,7 +281,7 @@ def create_structure(settings):
     """
     logging.info("Starting folder structure creation...")
     
-    def recursive_create(structure, base_path="."):
+    def recursive_create(structure, current_base_path):
         for item in structure:
             # 1. Key validation, but no action here.
             # The validation error is raised in get_expected_paths, which main_build intercepts.
@@ -306,7 +295,7 @@ def create_structure(settings):
             item_folder_name = get_folder_name(item)
             
             if item_folder_name:
-                folder_path = os.path.join(base_path, item_folder_name)
+                folder_path = os.path.join(current_base_path, item_folder_name)
                 try:
                     # 2. Folder creation/verification (ALWAYS DONE)
                     os.makedirs(folder_path, exist_ok=True)
@@ -320,7 +309,7 @@ def create_structure(settings):
                     recursive_create(item['children'], folder_path)
 
     try:
-        recursive_create(settings.get('structure', []))
+        recursive_create(settings.get('structure', []), base_path)
         logging.info("Folder structure creation finished.")
     except Exception:
         # Ensure the script stops on a folder creation error
@@ -331,6 +320,8 @@ def remove_missing_entries(structure_list, base_path="."):
     Recursively scans the structure_list. If a folder defined in the list
     does not exist on the disk, it is removed from the list.
     
+    EXCEPTION: The 'Configuration' folder is never removed.
+    
     Returns:
         bool: True if modifications were made, False otherwise.
     """
@@ -338,6 +329,13 @@ def remove_missing_entries(structure_list, base_path="."):
     # Iterate backwards to allow safe deletion from the list while looping
     for i in range(len(structure_list) - 1, -1, -1):
         item = structure_list[i]
+        
+        # --- FIX START: Protection du dossier Configuration ---
+        # On empêche la suppression du dossier de configuration s'il est manquant.
+        # Il sera recréé par create_structure juste après.
+        if item.get('type') == "Configuration":
+            continue
+        # --- FIX END ---
         
         item_folder_name = get_folder_name(item)
         if not item_folder_name:
@@ -372,13 +370,9 @@ def post_build_actions(source_path, json_data, is_initial_run, StartAHKScriptOut
     Handles final actions: moves settings.json on initial run and writes the
     root 'paths.ahk' file with a relative path to settings.json for portability.
     """
-    # 1. Find the config directory path
-    config_relative_path = find_config_dir_path(json_data, json_keyConfig)
-    if not config_relative_path:
-        logging.error(f"Could not find the configuration directory path ('type': '{json_keyConfig}') in settings.json during post-build.")
-        exit_script(EXIT_CODE_ERROR)
-
-    config_absolute_path = os.path.join(os.getcwd(), config_relative_path)
+    # 1. Define the config directory path
+    config_relative_path = "AHK"
+    config_absolute_path = os.path.join(USER_HOME, config_relative_path)
     
     # 2. Define the destination for settings.json
     json_destination_path = os.path.join(config_absolute_path, SETTINGS_FILE)
@@ -392,12 +386,19 @@ def post_build_actions(source_path, json_data, is_initial_run, StartAHKScriptOut
             logging.error(f"Error moving '{os.path.basename(source_path)}' to '{config_relative_path}': {e}")
             exit_script(EXIT_CODE_ERROR)
     
-    # 4. Write the PATHFILE (e.g., paths.ahk) to the ROOT directory
-    pathfile_output_path = os.path.join(os.getcwd(), PATHFILE)
-    
-    # Create a relative path for settings.json from the project root for AHK
-    settings_path_for_ahk = os.path.relpath(json_destination_path, os.getcwd())
-    settings_path_for_ahk = settings_path_for_ahk.replace(os.sep, "\\")
+    # 4. Write the PATHFILE (e.g., paths.ahk)
+    # --- FIX: The path file must be written to USER_HOME, where the script looks for it on startup ---
+    pathfile_output_path = os.path.join(USER_HOME, config_relative_path, PATHFILE)
+    settings_path_for_ahk = json_destination_path
+
+    # Create a path for settings.json from the project root for AHK
+    try:
+        # Tentative de chemin relatif
+        settings_path_for_ahk = os.path.relpath(json_destination_path, os.getcwd())
+        settings_path_for_ahk = settings_path_for_ahk.replace(os.sep, "\\")
+    except ValueError:
+        # Fallback chemin absolu (Cross-drive Z: vs C:)
+        settings_path_for_ahk = json_destination_path.replace(os.sep, "\\")
 
     # The content for paths.ahk using the relative path
     pathfile_content = (
@@ -418,6 +419,8 @@ def post_build_actions(source_path, json_data, is_initial_run, StartAHKScriptOut
             with open(pathfile_output_path, 'w', encoding='utf-8') as f:
                 f.write(pathfile_content)
             logging.info(f"Successfully wrote configuration to '{PATHFILE}'.")
+
+            
             
     except Exception as e:
         logging.error(f"Error writing to '{PATHFILE}': {e}")
@@ -621,6 +624,12 @@ def extract_ahk_generated_content(settings, FINAL_rootName, include_file_dir):
         
         # Add the base rootDir
         structure_lines.append(f"    static rootDir := A_ScriptDir")
+        # Determine user path prefix based on the OS running the generator script
+        if sys.platform.startswith('win'):
+            user_path_prefix = 'C:\\Users\\'
+        else:  # Assume Linux/other POSIX-like systems
+            user_path_prefix = '/home/'
+        structure_lines.append(f"    static User := '{user_path_prefix}' . A_UserName")
         
         # Add any other root-level properties from settings.json
         # (e.g., if you have "Version": "1.0" at the root of settings.json)
@@ -637,9 +646,16 @@ def extract_ahk_generated_content(settings, FINAL_rootName, include_file_dir):
         structure_lines.append(f'        }}')
         structure_lines.append(f'    }}\n')
 
-        # Recursive call for children path variables
+        # Manually add the 'Configuration' static var as requested
+        path_segment = f"\\.config\\AHK"
+        structure_lines.append(f'    static Configuration := A_Path.User "{path_segment}"')
+        
+        # Filter the main list to remove the Configuration entry
+        filtered_structure_list = [item for item in structure_list if item.get("type") != "Configuration"]
+
+        # Recursive call for the REST of the path variables
         path_var_lines = generate_nested_path_structure(
-            structure_list, 
+            filtered_structure_list, 
             "A_Path",         # parent_class_path_str
             "A_Path.rootDir", # parent_base_str
             1                 # indent_level (starts at 1 for 4 spaces)
@@ -650,7 +666,7 @@ def extract_ahk_generated_content(settings, FINAL_rootName, include_file_dir):
 
     # --- 2. Generate #include directives (This part is unchanged) ---
     base_project_dir = os.getcwd() 
-    include_string = generate_ahk_includes(structure_list, FINAL_rootName, base_project_dir, json_keyConfig, include_file_dir)
+    include_string = generate_ahk_includes(structure_list, FINAL_rootName, base_project_dir, "Configuration", include_file_dir)
     
     return "\n".join(structure_lines), include_string
 
@@ -717,16 +733,22 @@ def generate_ahk_includes(structure_list, FINAL_rootName, base_dir, json_keyConf
                         # Get the full absolute path of the found .ahk file
                         found_file_full_path = os.path.join(full_fs_path, item_name)
                         
-                        # Create a relative path from the location of the generated include file
-                        relative_path_for_include = os.path.relpath(found_file_full_path, include_file_dir)
+                        # Gestion Cross-Drive (Z: vs C:)
+                        try:
+                            # Create a relative path from the location of the generated include file
+                            relative_path_for_include = os.path.relpath(found_file_full_path, include_file_dir)
+                            ahk_include_path = relative_path_for_include.replace(os.sep, "\\")
+                        except ValueError:
+                            # Si les disques sont différents (ex: Z: et C:), relpath échoue.
+                            # On utilise le chemin absolu.
+                            logging.debug(f"Cross-drive detected for {item_name}. Using absolute path.")
+                            ahk_include_path = found_file_full_path.replace(os.sep, "\\")
                         
-                        logging.debug(f"AHK file found: {relative_path_for_include}")
-                        
-                        # Format for AHK (backslashes)
-                        ahk_include_path = relative_path_for_include.replace(os.sep, "\\")
+                        logging.debug(f"AHK file found (Include path): {ahk_include_path}")
 
-                        # Use the new relative path
+                        # Use the determined path
                         found_ahk_files.append(f'#include "{ahk_include_path}"')
+
             elif current_effective_include_status is False:
                 # This log confirms the scan was skipped due to 'false' inheritance
                 logging.info(f"Skipping AHK includes for node type: {node_type} (effective 'is_include': 'false')")
@@ -823,7 +845,7 @@ def generate_INCLUDE_OUTPUT(settings, Param_pathsAHK_jsonPathVar, is_initial_run
 
     # Build the output path using the config folder
     # config_path is (e.g., ".config"), INCLUDE_OUTPUT is (e.g., ".include.ahk")
-    FINAL_INCLUDE_FILE_PATH = os.path.join(os.getcwd(), config_path, INCLUDE_OUTPUT)
+    FINAL_INCLUDE_FILE_PATH = os.path.join(USER_HOME, config_path, INCLUDE_OUTPUT)
     FINAL_INCLUDE_FILE_PATH = os.path.abspath(FINAL_INCLUDE_FILE_PATH) # Clean up
     
     # Get the directory where the include file will be written
@@ -911,7 +933,7 @@ def final_script_actions(StartAHKFileOutput, is_initial_run, generated_INCLUDE_O
 
     if create_base_script:
         # The AHK include path must be relative to the script at root (e.g., .config\.includes.ahk)
-        include_file_name_for_ahk = os.path.join(config_path, generated_INCLUDE_OUTPUT_filename)
+        include_file_name_for_ahk = os.path.join(USER_HOME, config_path, generated_INCLUDE_OUTPUT_filename)
         include_file_name_for_ahk = include_file_name_for_ahk.replace(os.sep, "\\")
 
         current_date = datetime.now().strftime("%Y/%m/%d")
@@ -1015,7 +1037,7 @@ def get_paths_to_ignore_for_scan(structure, base_path="."):
             
     return ignored_paths
 
-def find_unknown_folders(expected_paths, paths_to_ignore_scan):
+def find_unknown_folders(expected_paths, paths_to_ignore_scan, scan_root):
     """
     Scans the project directory and finds all folders that exist on disk
     but are NOT part of the expected_paths list. It also ignores folders
@@ -1107,19 +1129,21 @@ def select_action_cli(unknown_folder, structure_json):
         
         logging.info(f"Utilisateur a choisi d'AJOUTER '{unknown_folder}'. Parent auto-détecté : '{parent_path}'.")
         
-        # 2. Vérifier que le parent auto-détecté existe bien dans le JSON
-        parent_node = find_parent_node_in_json(structure_json, os.path.normpath(parent_path))
-        
-        if not parent_node:
-            logging.error(f"Échec de l'ajout auto : Le parent '{parent_path}' n'a pas été trouvé dans settings.json.")
-            print(f"ERREUR : Impossible d'ajouter '{unknown_folder}'.")
-            print(f"Le parent auto-détecté ('{parent_path}') n'existe pas dans l'arbre settings.json.")
-            print("Veuillez d'abord ajouter le dossier parent (s'il est aussi inconnu), ou ignorer celui-ci.")
-            try:
-                input("Appuyez sur Entrée pour continuer...") # Pause pour que l'utilisateur voie l'erreur
-            except (KeyboardInterrupt, EOFError):
-                pass
-            return 'skip', None # Échec gracieux
+        if parent_path == "." or parent_path == "":
+            logging.info("Le parent est la racine ('.'), validation implicite.")
+        else:
+            parent_node = find_parent_node_in_json(structure_json, os.path.normpath(parent_path))
+            
+            if not parent_node:
+                logging.error(f"Échec de l'ajout auto : Le parent '{parent_path}' n'a pas été trouvé dans settings.json.")
+                print(f"ERREUR : Impossible d'ajouter '{unknown_folder}'.")
+                print(f"Le parent auto-détecté ('{parent_path}') n'existe pas dans l'arbre settings.json.")
+                print("Veuillez d'abord ajouter le dossier parent (s'il est aussi inconnu), ou ignorer celui-ci.")
+                try:
+                    input("Appuyez sur Entrée pour continuer...") 
+                except (KeyboardInterrupt, EOFError):
+                    pass
+                return 'skip', None # Échec gracieux
         
         # 3. Le parent existe, retourner l'action 'add' avec le parent trouvé
         print(f"Parent trouvé : '{parent_path}'. Ajout de '{unknown_folder}' en cours...")
@@ -1255,13 +1279,25 @@ def add_folder_to_settings(json_data, unknown_folder_path, parent_path, settings
     """
     logging.info(f"Tentative d'ajout de '{unknown_folder_path}' à settings.json sous '{parent_path}'...")
     
-    # 1. Find the parent node in the JSON structure
-    parent_node = find_parent_node_in_json(json_data.get('structure', []), os.path.normpath(parent_path))
-    
-    if not parent_node:
-        logging.error(f"Impossible de trouver le noeud parent '{parent_path}' dans settings.json. Ajout annulé.")
-        print(f"ERREUR: Parent '{parent_path}' non trouvé dans JSON. Annulé.")
-        return
+    target_list = None
+
+    # 1. Determine where to add the new node
+    if parent_path == "." or parent_path == "":
+        # Cas spécial : Ajout à la racine
+        target_list = json_data.get('structure', [])
+    else:
+        # Cas normal : Ajout dans un enfant
+        parent_node = find_parent_node_in_json(json_data.get('structure', []), os.path.normpath(parent_path))
+        
+        if not parent_node:
+            logging.error(f"Impossible de trouver le noeud parent '{parent_path}' dans settings.json. Ajout annulé.")
+            print(f"ERREUR: Parent '{parent_path}' non trouvé dans JSON. Annulé.")
+            return
+
+        if "children" not in parent_node:
+            parent_node["children"] = []
+        
+        target_list = parent_node["children"]
 
     # 2. Get the name of the new folder (the last part of the path)
     new_folder_name = os.path.basename(unknown_folder_path)
@@ -1274,16 +1310,15 @@ def add_folder_to_settings(json_data, unknown_folder_path, parent_path, settings
     }
     
     # 4. Scan the folder on disk for its children
+    # Note: unknown_folder_path is relative to CWD (Project Root), which is correct for scanning content
     full_disk_path = os.path.join(os.getcwd(), unknown_folder_path)
     children = scan_disk_for_children(full_disk_path)
     if children:
         new_node["children"] = children
 
-    # 5. Add the new node to the parent's "children" list
-    if "children" not in parent_node:
-        parent_node["children"] = []
+    # 5. Add the new node to the identified target list
+    target_list.append(new_node)
     
-    parent_node["children"].append(new_node)
     logging.info(f"Noeud {new_folder_name} ajouté avec succès à la structure JSON (en mémoire).")
     
     # 6. Write the modified json_data back to the settings.json file
@@ -1370,16 +1405,9 @@ def create_minimal_settings():
     logging.info(f"RootName fourni par l'utilisateur : {root_name}")
 
     # 3. Définir la structure JSON minimale
-    # Utilise la variable globale json_keyConfig pour le type "Configuration"
     minimal_data = {
         "RootName": root_name,
         "structure": [
-            {
-                "type": json_keyConfig, # "Configuration"
-                "name": ".config",      # Dossier où settings.json sera déplacé
-                "is_include": "false",
-                "is_path": "true"
-            },
             {
                 "type": "Library",
                 "name": "Library",
@@ -1390,7 +1418,7 @@ def create_minimal_settings():
     }
     
     # 4. Définir le chemin de destination (à la racine)
-    settings_abs_path = os.path.abspath(os.path.join(os.getcwd(), SETTINGS_FILE))
+    settings_abs_path = os.path.abspath(os.path.join(USER_HOME, "AHK", SETTINGS_FILE))
     
     # 5. Écrire le fichier
     try:
@@ -1457,8 +1485,12 @@ def main_build():
     
     logging.info(f"--- Build Process Started ---")
     
-    # Look for PATHFILE (e.g., paths.ahk) at the ROOT
-    pathsAHK_source = os.path.join(os.getcwd(), PATHFILE) 
+    # Create the AHK config folder if it doesn't exist
+    ahk_config_dir = os.path.join(USER_HOME, "AHK")
+    os.makedirs(ahk_config_dir, exist_ok=True)
+    
+    # Look for PATHFILE (e.g., paths.ahk) at the new config root
+    pathsAHK_source = os.path.join(ahk_config_dir, PATHFILE)
     
     pathsAHK_jsonPathVar = None # This is the path to .config/settings.json
     is_initial_run = False 
@@ -1484,7 +1516,7 @@ def main_build():
     #    (Either from the remote path or from root if 'initial_run')
     # ------------------------------------------------------------------------------------
     
-    json_source_absolutePath = os.path.join(os.getcwd(), SETTINGS_FILE) # Local source (root)
+    json_source_absolutePath = os.path.join(ahk_config_dir, SETTINGS_FILE) # Source in AHK User Home
     json_data = None
     loaded_settings_json_path = None # <--- VARIABLE AJOUTÉE POUR STOCKER LE CHEMIN
     
@@ -1558,13 +1590,10 @@ def main_build():
         logging.error("Error: 'RootName' key is missing in your settings.json file.")
         exit_script(EXIT_CODE_ERROR)
     
-    # Validate and FIND config_relative_path (e.g., .config)
-    config_relative_path = find_config_dir_path(json_data, json_keyConfig)
-    if not config_relative_path:
-        logging.error(f"Mandatory key 'type' for structure item type '{json_keyConfig}' is missing or empty in settings.json.")
-        exit_script(EXIT_CODE_ERROR) 
+    # Set config_relative_path
+    config_relative_path = "AHK"
         
-    logging.info(f"Mandatory keys 'RootName' ('{FINAL_rootName}') and 'Configuration' path ('{config_relative_path}') are present.")
+    logging.info(f"Mandatory key 'RootName' ('{FINAL_rootName}') is present. Using config path '{config_relative_path}'.")
         
     # --- RootName Change Detection and Migration ---
     
@@ -1634,11 +1663,10 @@ def main_build():
     # 4. Sync and Generate folder structure
     # ------------------------------------------------------------------------------------
     
-    # Instead of checking expected paths and asking the user, we now
-    # prune the JSON structure to match reality (remove missing folders).
     logging.info("Synchronizing settings.json with current disk structure...")
     
-    structure_was_modified = remove_missing_entries(json_data['structure'])
+    # --- FIX: Project structure is in CWD, so check for missing folders there ---
+    structure_was_modified = remove_missing_entries(json_data['structure'], os.getcwd())
     
     if structure_was_modified:
         logging.info("Structure mismatched. Missing folders removed from memory.")
@@ -1651,13 +1679,12 @@ def main_build():
             logging.error(f"Error saving updated settings.json: {e}")
             # We continue even if save fails, using the in-memory structure
 
-    # We still run create_structure. 
-    # Since we just removed missing folders from json_data, this will effectively 
-    # just verify that the remaining folders still exist (which they should).
-    create_structure(json_data)
+    # --- FIX: Create the project structure in the CWD ---
+    create_structure(json_data, os.getcwd())
 
+    # --- FIX: Generate relative paths for the CWD scan ---
     try:
-        expected_paths = get_expected_paths(json_data['structure'])
+        expected_paths = get_expected_paths(json_data['structure'], base_path='.')
     except ValueError as e:
         logging.fatal(f"FATAL VALIDATION ERROR: {e}")
         exit_script(EXIT_CODE_ERROR)
@@ -1667,9 +1694,11 @@ def main_build():
     # ------------------------------------------------------------------------------------
     logging.info("--- Checking for unknown folders not defined in settings.json ---")
     
-    # Get a list of folders to ignore based on "is_include": "false"
-    paths_to_ignore = get_paths_to_ignore_for_scan(json_data['structure'])
-    unknown_folders = find_unknown_folders(expected_paths, paths_to_ignore)
+    # Generate relative paths for ignoring, to match the scan
+    paths_to_ignore = get_paths_to_ignore_for_scan(json_data['structure'], base_path='.')
+    
+    # Call find_unknown_folders with relative paths. The function itself scans CWD.
+    unknown_folders = find_unknown_folders(expected_paths, paths_to_ignore, os.getcwd())
     
     if unknown_folders:
         
