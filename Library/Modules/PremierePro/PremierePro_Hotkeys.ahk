@@ -47,22 +47,22 @@ MButton::{
 
 F13::{
     ActionsExecuted := HandleKeyGestures(ZoomOut, , , Panel_UnderMouse)
-    GUI_Debug.ReturnDebug "{WheelLeft} := #{Left})", "HandleKeyGestures() -> " ActionsExecuted, true
+    GUI_Debug.ReturnDebug "{WheelLeft} := {F13})", "HandleKeyGestures() -> " ActionsExecuted, true
 }
 
 F14::{
     ActionsExecuted := HandleKeyGestures(ZoomIn, , , Panel_UnderMouse)
-    GUI_Debug.ReturnDebug "{WheelRight} := #{Right})", "HandleKeyGestures() -> " ActionsExecuted, true
+    GUI_Debug.ReturnDebug "{WheelRight} := {F14})", "HandleKeyGestures() -> " ActionsExecuted, true
 }
 
 !F13::{
     ActionsExecuted := HandleKeyGestures(KeyframeSelPrev, , , Panel_EffectControls, Panel_UnderMouse)
-    GUI_Debug.ReturnDebug "{Alt} + {WheelLeft} := #{Left})", "HandleKeyGestures() -> " ActionsExecuted, true
+    GUI_Debug.ReturnDebug "{Alt} + {WheelLeft} := !{F13})", "HandleKeyGestures() -> " ActionsExecuted, true
 }
 
 !F14::{
     ActionsExecuted := HandleKeyGestures(KeyframeSelNext, , , Panel_EffectControls, Panel_UnderMouse)
-    GUI_Debug.ReturnDebug "{Alt} + {WheelRight} := #{Left})", "HandleKeyGestures() -> " ActionsExecuted, true
+    GUI_Debug.ReturnDebug "{Alt} + {WheelRight} := !{F14})", "HandleKeyGestures() -> " ActionsExecuted, true
 }
 
 
@@ -276,7 +276,6 @@ F20::{
 [ ][ ][ ][ ]
 [ ][ ][ ][ ]
 */
-
 ;@_PadKey13
 F21::{
     GUI_Debug.ReturnDebug "{PadKey13} => {F21}","Keyframe.Perform() => " Keyframe.Perform("Select", "Prev") , true
@@ -319,6 +318,7 @@ Media_Next::{
             /*************************************************************************************
                                                 @KEYPAD_SMALLWHEEL2
             *************************************************************************************/
+
 Volume_Down::{
     SendInput(KS_Premiere.Keyframe.Prev)
     GUI_Debug.ReturnDebug "MACROPAD / {Volume_Down}", "SendInput(KS_Premiere.Keyframe.Prev)", true
@@ -447,29 +447,29 @@ Browser_Forward::{
     MarkersYellow := [(Actions) => (SendInput(KS_Premiere.Markers.Add.Yellow))]
 
 
+/**
 
+If Toggle.Capslock() {
+    
+    ^NumpadAdd::{
+        ValueEdit("+5")
+        GUI_Debug.ReturnDebug "{CTRL} + {NumpadAdd}", "ValueEdit('+5')", true
+    }
+    ^NumpadSub::{
+        ValueEdit("-5")
+        GUI_Debug.ReturnDebug "{CTRL} + {NumpadSub}", "ValueEdit('-5')", true
+    }
+    NumpadAdd::{
+        ValueEdit("+10")
+        GUI_Debug.ReturnDebug "{NumpadAdd}", "ValueEdit('+10')", true
+    }
+    NumpadSub::{
+        ValueEdit("-10")
+        GUI_Debug.ReturnDebug "{NumpadSub}", "ValueEdit('-10')", true
+    }
+}
 
-
-;If Toggle.Capslock() {
-;    
-;    ^NumpadAdd::{
-;        ValueEdit("+5")
-;        GUI_Debug.ReturnDebug "{CTRL} + {NumpadAdd}", "ValueEdit('+5')", true
-;    }
-;    ^NumpadSub::{
-;        ValueEdit("-5")
-;        GUI_Debug.ReturnDebug "{CTRL} + {NumpadSub}", "ValueEdit('-5')", true
-;    }
-;    NumpadAdd::{
-;        ValueEdit("+10")
-;        GUI_Debug.ReturnDebug "{NumpadAdd}", "ValueEdit('+10')", true
-;    }
-;    NumpadSub::{
-;        ValueEdit("-10")
-;        GUI_Debug.ReturnDebug "{NumpadSub}", "ValueEdit('-10')", true
-;    }
-;}
-
+**/
 
 ;+q::HandleKeyGestures(KeyframeMorePrev, , KeyframeMorePrev, , )
 ;+d::HandleKeyGestures(KeyframeMoreNext, , KeyframeMoreNext, , )

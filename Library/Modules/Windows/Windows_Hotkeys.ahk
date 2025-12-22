@@ -117,55 +117,57 @@ REG ADD HKCU\Software\Classes\ms-officeapp\Shell\Open\Command /t REG_SZ /d rundl
     GUI_Debug.ReturnDebug A_ThisHotkey, "Komorebic() => 'focus right'", true
 }
 
-;#b:: {
-;resolutions := [[810, 1440], [800, 800], [1400, 1400]]
-;
-;hwnd := WinActive("A")
-;if !hwnd
-;return
-;
-;; Récupère les dimensions actuelles
-;WinGetPos(&x, &y, &w, &h, hwnd)
-;
-;; Trouve l'index de la résolution actuelle ou la plus proche
-;idx := 0, minDiff := 1e9
-;loop resolutions.Length {
-;rw := resolutions[A_Index][1], rh := resolutions[A_Index][2]
-;diff := Abs(w - rw) + Abs(h - rh)
-;if diff < minDiff
-;idx := A_Index, minDiff := diff
-;}
-;
-;; Résolution suivante (boucle circulaire)
-;next := Mod(idx, resolutions.Length) + 1
-;targetW := resolutions[next][1], targetH := resolutions[next][2]
-;
-;; Centre la fenêtre
-;posX := (A_ScreenWidth - targetW) // 2
-;posY := (A_ScreenHeight - targetH) // 2
-;
-;WinMove(posX, posY, targetW, targetH, hwnd)
-;}
-;
-;#c:: {
-;hwnd := WinActive("A")
-;if !hwnd
-;return
-;
-;; Récupérer la taille actuelle de la fenêtre
-;WinGetPos(&winX, &winY, &winW, &winH, hwnd)
-;
-;; Taille de l'écran principal
-;screenW := A_ScreenWidth
-;screenH := A_ScreenHeight
-;
-;; Calcul des nouvelles positions (centrées)
-;posX := (screenW - winW) // 2
-;posY := (screenH - winH) // 2
-;
-;; Appliquer le déplacement sans redimensionnement
-;WinMove(posX, posY, , , hwnd)
-;}
+#b:: {
+    resolutions := [[810, 1440], [1920, 1080], [1400, 1400]]
+
+    hwnd := WinActive("A")
+    if !hwnd
+    return
+
+    ; Récupère les dimensions actuelles
+    WinGetPos(&x, &y, &w, &h, hwnd)
+
+    ; Trouve l'index de la résolution actuelle ou la plus proche
+    idx := 0, minDiff := 1e9
+    loop resolutions.Length {
+        rw := resolutions[A_Index][1], rh := resolutions[A_Index][2]
+        diff := Abs(w - rw) + Abs(h - rh)
+        if diff < minDiff
+        idx := A_Index, minDiff := diff
+    }
+
+    ; Résolution suivante (boucle circulaire)
+    next := Mod(idx, resolutions.Length) + 1
+    targetW := resolutions[next][1], targetH := resolutions[next][2]
+
+    ; Centre la fenêtre
+    posX := (A_ScreenWidth - targetW) // 2
+    posY := (A_ScreenHeight - targetH) // 2
+
+    WinMove(posX, posY, targetW, targetH, hwnd)
+}
+/**
+
+#c:: {
+hwnd := WinActive("A")
+if !hwnd
+return
+
+; Récupérer la taille actuelle de la fenêtre
+WinGetPos(&winX, &winY, &winW, &winH, hwnd)
+
+; Taille de l'écran principal
+screenW := A_ScreenWidth
+screenH := A_ScreenHeight
+
+; Calcul des nouvelles positions (centrées)
+posX := (screenW - winW) // 2
+posY := (screenH - winH) // 2
+
+; Appliquer le déplacement sans redimensionnement
+WinMove(posX, posY, , , hwnd)
+}
+ */
 
 
 /** 

@@ -1,4 +1,4 @@
-﻿#Requires AutoHotkey v2.0
+#Requires AutoHotkey v2.0
 #SingleInstance Force
 SetWorkingDir A_ScriptDir
 ; Ensures the working directory is that of the AHK script
@@ -19,7 +19,6 @@ class Files {
 
 ; If one of thoses return false = Fatal Error
 Launcher.Log.Toggle := false
-Launcher.Check.IsAdmin
 Launcher.Check.Python(&pythonCmd)
 Launcher.Check.mainPy(A_ScriptDir, Files.mainPy)
 Launcher.Build(pythonCmd, Files.mainPy, Files.outputPath, Files.outputIncludes, Launcher.Log.Toggle)
@@ -97,14 +96,14 @@ class Launcher {
 
             if (foundCommand != "") {
                 ; The original script used the assumption that RunWait returned the version. We log success.
-                resultTrue := " 🐍 Python Check OK" . "`n`nPython is installed and accessible via the command: " . foundCommand
+                resultTrue := " 🐍 Python Check OK" . "`nPython is installed and accessible via the command: " . foundCommand
                 Launcher.Log.Write("DONE", resultTrue)
                 return foundCommand
             } else {
-                resultFalse := "Python not found" . "`n`nPython could not be launched with the common commands ('python', 'py', 'python3')."
-                . "`n`nIf you are using modules that depend on Python, please ensure it is installed and its access path (PATH) is correctly configured."
+                resultFalse := "Python not found" . "`nPython could not be launched with the common commands ('python', 'py', 'python3')."
+                . "`nIf you are using modules that depend on Python, please ensure it is installed and its access path (PATH) is correctly configured."
                 ; Added instruction to check log file
-                . "`n`nFor more details, please check the log file: " . Launcher.Log.LogFile
+                . "`nFor more details, please check the log file: " . Launcher.Log.LogFile
                 Launcher.Log.Write("FATAL_ERROR", resultFalse)
                 MsgBox Launcher.Log.FatErr[1] resultFalse, Launcher.Log.FatErr[2], Launcher.Log.FatErr[3]
                 return foundCommand := false
@@ -116,7 +115,7 @@ class Launcher {
             if !FileExist(ScriptLocation) {
                 errorMsg := "The Python script '" StartScript "' was not found in the folder '" A_ScriptDir "'"
                 Launcher.Log.Write("FATAL_ERROR", errorMsg)
-                MsgBox Launcher.Log.FatErr[1] errorMsg . "`n`nCheck the log file: " . Launcher.Log.LogFile,
+                MsgBox Launcher.Log.FatErr[1] errorMsg . "`nCheck the log file: " . Launcher.Log.LogFile,
                 Launcher.Log.FatErr[2], Launcher.Log.FatErr[3]
                 ExitApp
             } else {
@@ -125,52 +124,22 @@ class Launcher {
             }
         }
 
-        /**
-        * Ensures the script is running with administrator privileges.
-        * Restarts the script using RunAs if not already running as Admin or with /restart.
-        * @returns {void}
-        */
-        static IsAdmin()
-        {
-            full_command_line := DllCall("GetCommandLine", "str")
-            if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)")) {
-                try {
-                    Launcher.Log.Write("WARNING", "Attempting automatic restart as administrator...")
-                    warnMsg := "Automatic restart as administrator.."
-                    
-                    ; Added instruction to check log file
-                    msgBoxText := warnMsg . "`n`nCheck the log file: " . Launcher.Log.LogFile
-
-                    if A_IsCompiled {
-                        MsgBox Launcher.Log.Warn[1] msgBoxText, Launcher.Log.Warn[2], Launcher.Log.Warn[3]
-                        Run '*RunAs "' A_ScriptFullPath '" /restart'
-                    }
-                    else {
-                        MsgBox Launcher.Log.Warn[1] msgBoxText, Launcher.Log.Warn[2], Launcher.Log.Warn[3]
-                        Run '*RunAs "' A_AhkPath '" /restart "' A_ScriptFullPath '"'
-                    }
-                }
-                ExitApp
-            }
-            Launcher.Log.Write("INFO", "Script is running with appropriate permissions (Admin or no restart needed).")
-        }
-
         static REGEDIT(RegPath := "", ExpectedValue := "") {
             Launcher.Log.Write("INFO", "Checking registry path: " RegPath " for expected value: " ExpectedValue)
             try { ; Read the registry value
                 ActualValue := RegRead(RegPath)
                 if (ActualValue == ExpectedValue) {
-                    resultTrue := "Deactivation OK" . "`n`nThe registry key for the Office Key is correctly configured (" . RegPath . " = " . ActualValue . ")."
+                    resultTrue := "Deactivation OK" . "`nThe registry key for the Office Key is correctly configured (" . RegPath . " = " . ActualValue . ")."
                     . "`n The risk of triggering Office is low."
                     Launcher.Log.Write("DONE", resultTrue)
                     return true
                 } else {
-                    resultFalse := "Office Key Active" . "`n`nThe registry key is currently: " . ActualValue
-                    . "`n`nIt must be modified to avoid conflict with complex shortcuts (Win+Shift+Alt). "
-                    . "`n`nThis will open the page https://m365.cloud.microsoft/?from=OfficeKey if you are not careful.`n`n"
-                    . "`n`nYou should run the following command:`n`n" . "REG ADD " . RegPath . " /t REG_SZ /d " . ExpectedValue
+                    resultFalse := "Office Key Active" . "`nThe registry key is currently: " . ActualValue
+                    . "`nIt must be modified to avoid conflict with complex shortcuts (Win+Shift+Alt). "
+                    . "`nThis will open the page https://m365.cloud.microsoft/?from=OfficeKey if you are not careful.`n`n"
+                    . "`nYou should run the following command:`n" . "REG ADD " . RegPath . " /t REG_SZ /d " . ExpectedValue
                     ; Added instruction to check log file
-                    msgBoxText := resultFalse . "`n`nCheck the log file: " . Launcher.Log.LogFile
+                    msgBoxText := resultFalse . "`nCheck the log file: " . Launcher.Log.LogFile
                     Launcher.Log.Write("WARNING", resultFalse)
                     msgbox Launcher.Log.Warn[1] msgBoxText, Launcher.Log.Warn[2], Launcher.Log.Warn[3]
                     return false
@@ -178,12 +147,12 @@ class Launcher {
             } catch as e {
                 ; Read error, most likely because the key/value does not exist.
                 errorMsg := "Registry Read Error: " e.Message . "`nCould not read key: " RegPath
-                . "`n`nThis usually means the Office Key is active or the key structure is different."
-                resultFalse := "Office Key Active" . "`n`nIt must be modified to avoid conflict with complex shortcuts (Win+Shift+Alt). "
-                . "`n`nThis will open the page https://m365.cloud.microsoft/?from=OfficeKey if you are not careful.`n`n"
-                . "`n`nYou should run the following command:`n`n" . "REG ADD " . RegPath . " /t REG_SZ /d " . ExpectedValue
+                . "`nThis usually means the Office Key is active or the key structure is different."
+                resultFalse := "Office Key Active" . "`nIt must be modified to avoid conflict with complex shortcuts (Win+Shift+Alt). "
+                . "`nThis will open the page https://m365.cloud.microsoft/?from=OfficeKey if you are not careful.`n`n"
+                . "`nYou should run the following command:`n`n" . "REG ADD " . RegPath . " /t REG_SZ /d " . ExpectedValue
                 ; Added instruction to check log file
-                msgBoxText := resultFalse . "`n`nCheck the log file: " . Launcher.Log.LogFile
+                msgBoxText := resultFalse . "`nCheck the log file: " . Launcher.Log.LogFile
                 Launcher.Log.Write("WARNING", errorMsg . "`nAction Required: " resultFalse)
                 msgbox Launcher.Log.Warn[1] msgBoxText, Launcher.Log.Warn[2], Launcher.Log.Warn[3]
                 return false
@@ -200,7 +169,7 @@ class Launcher {
         } 
 
         Launcher.Log.Write(
-            "INFO", "Starting the build process. 'Launcher.Log.Toggle' is set to true," . 
+            "INFO", "Starting the build process. 'Launcher.Log.Toggle' is set to true," .
             " so '--log' will be appended as an argument for main.py to enable its internal logging functionality."
             )
 
@@ -214,14 +183,14 @@ class Launcher {
         
         Launcher.Log.Write("INFO", "Build script finished with Exit Code: " exitCode)
         if (exitCode = 0) {
-            successMsg := "Configuration Successful!" . "`n`nThe Python script finished successfully and generated 'path.ini'."
+            successMsg := "Configuration Successful!" . "`nThe Python script finished successfully and generated 'path.ini'."
             Launcher.Log.Write("DONE", successMsg)
             return
         } else {
-            errorMsg := "Configuration Failure!" . "`n`nThe Python script encountered an error or was canceled by the user. Exit code: " exitCode
+            errorMsg := "Configuration Failure!" . "`nThe Python script encountered an error or was canceled by the user. Exit code: " exitCode
             . "`nThe operation is canceled."
             ; Added instruction to check log file
-            msgBoxText := errorMsg . "`n`nCheck the log file: " . Launcher.Log.LogFile
+            msgBoxText := errorMsg . "`nCheck the log file: " . Launcher.Log.LogFile
             Launcher.Log.Write("FATAL_ERROR", errorMsg)
             MsgBox Launcher.Log.FatErr[1] msgBoxText, Launcher.Log.FatErr[2], Launcher.Log.FatErr[3]
             ExitApp

@@ -23,4 +23,4 @@ SetWinDelay 2
 SetKeyDelay 0, 2
 SetMouseDelay 0
 SetControlDelay 0
-A_HotkeyInterval := 0
+A_HotkeyInterval := 1

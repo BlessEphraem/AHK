@@ -27,23 +27,23 @@ Need to do a "Double Value Copy/Paste" func for pasting double values (ex: Motio
 
 #include "C:\Users\%A_UserName%\.config\AHK\.includes.ahk"
 
-    full_command_line := DllCall("GetCommandLine", "str")
-
-    if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)")) {
-        try {
-            if A_IsCompiled 
-                Run '*RunAs "' A_ScriptFullPath '" /restart'
-            else
-                Run '*RunAs "' A_AhkPath '" /restart "' A_ScriptFullPath '"'
-        } ExitApp
-    }
-
     TraySetIcon(A_Path.SupportFiles.Icons "\deepr_Icon.png")
 
     if (PID := !ProcessExist("komorebi.exe"))
         CMD("komorebic start")
     
+    
+    #SuspendExempt
     #ESC::Run '*RunAs "' A_ScriptDir "\Launcher.ahk" '" /restart "' 
+    #^!Space::
+    {
+        Suspend(-1)
+        if (A_IsSuspended)
+            SoundPlay(A_Path.SupportFiles.Sounds . "\Button1.wav")
+        else
+            SoundPlay(A_Path.SupportFiles.Sounds . "\Button3.wav")
+    } 
+    #SuspendExempt False 
 
 /***********************************************************************************
                                     @SetTimers
