@@ -5,8 +5,8 @@
  * Guides the user to visually drag an effect preset from the Effects panel
  * onto the timeline in Adobe Premiere Pro. It handles panel activation,
  * mouse confinement, and input blocking during the drag operation.
- * NOTE: This function relies on external definitions like KS_Premiere.SelectPanel.Effect, 
- * KS_Premiere.SearchBox, TimedTooltip, and ClassNN_ToCoords.
+ * NOTE: This function relies on external definitions like Premiere.SelectPanel.Effect, 
+ * Premiere.SearchBox, TimedTooltip, and ClassNN_ToCoords.
  * @param {boolean} [ClosePanel=false] If true, sends Ctrl+W after the drag operation to close the Effects panel.
  * @returns {void}
  */
@@ -24,7 +24,7 @@ ApplyPreset(ClosePanel := false) {
     MouseGetPos &mStart_X, &mStart_Y
     
     ; Send the hotkey/command to select/focus the Effects panel (must be defined externally).
-    SendInput KS_Premiere.SelectPanel.Effect
+    SendInput Premiere.SelectPanel.Effect
     Sleep 250 ; Give the application time to focus the panel.
 
     ; Identify the active window handle (expected to be Premiere Pro).
@@ -43,7 +43,7 @@ ApplyPreset(ClosePanel := false) {
     ControlGetPos &x, &y, &w, &h, effectClassNN, hwnd
     
     ; Send the hotkey/command to focus the Search Box within the panel (must be defined externally).
-    SendInput KS_Premiere.SearchBox
+    SendInput Premiere.SearchBox
 
     Sleep 50
     ; Get the ClassNN of the search box (used to identify the panel, though the effectClassNN is used for dimensions).

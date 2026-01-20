@@ -4,15 +4,15 @@
  * @function ClipGain
  * Sets the audio gain value for the currently selected clip(s) in Adobe Premiere Pro.
  * It sends the shortcut to open the Audio Gain dialog, inputs the desired value, and confirms.
- * NOTE: This function relies on an external definition: KS_Premiere.AudioGain.
+ * NOTE: This function relies on an external definition: Premiere.AudioGain.
  * @param {string|number} value The desired audio gain value (e.g., '3' for +3dB, '-6' for -6dB).
  * @returns {void}
  * @platform Adobe Premiere Pro
  */
 ClipGain(value) {
     ; Send the hotkey/command to open the 'Audio Gain' dialog box in Premiere Pro.
-    ; KS_Premiere.AudioGain is expected to be defined elsewhere (e.g., 'g').
-    SendInput KS_Premiere.AudioGain
+    ; Premiere.AudioGain is expected to be defined elsewhere (e.g., 'g').
+    SendInput Premiere.AudioGain
     sleep 1 ; Minimal delay after opening the dialog.
     
     ; Input the numerical value directly into the focused field (expected to be the gain adjustment).

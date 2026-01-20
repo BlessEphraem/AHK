@@ -4,7 +4,7 @@
  * @class Panel
  * Provides static methods for managing focus and retrieving window/control information 
  * for specific panels within Adobe Premiere Pro.
- * NOTE: Relies on external hotkey definitions in KS_Premiere.SelectPanel.
+ * NOTE: Relies on external hotkey definitions in Premiere.SelectPanel.
  */
 class Panel {
     /**
@@ -18,9 +18,9 @@ class Panel {
     static Focus(Name, Reset := true) {
         if Reset {
             ; Send 'Effects' hotkey twice with a short delay to reset the active panel focus.
-            SendInput KS_Premiere.SelectPanel.EffectControls
+            SendInput Premiere.SelectPanel.EffectControls
             Sleep(12)
-            SendInput KS_Premiere.SelectPanel.EffectControls
+            SendInput Premiere.SelectPanel.EffectControls
             Sleep(5)
         }
         ; If the target is 'Effects', the reset sequence already focused it, so return.
@@ -28,13 +28,13 @@ class Panel {
             return
         ; Send the specific hotkey for the requested panel.
         else if Name = "Effects"
-            SendInput KS_Premiere.SelectPanel.Effects
+            SendInput Premiere.SelectPanel.Effects
         else if Name = "Player"
-            SendInput KS_Premiere.SelectPanel.Player
+            SendInput Premiere.SelectPanel.Player
         else if Name = "Timeline"
-            SendInput KS_Premiere.SelectPanel.Timeline
+            SendInput Premiere.SelectPanel.Timeline
         else if Name = "Bin"
-            SendInput KS_Premiere.SelectPanel.Bin
+            SendInput Premiere.SelectPanel.Bin
         return
     }
     

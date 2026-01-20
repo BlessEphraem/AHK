@@ -11,10 +11,10 @@ Class Attributes {
         BlockInput("MouseMove")
         MouseGetPos &xpos, &ypos
 
-        SendInput(KS_Premiere.SelectPanel.Timeline)
+        SendInput(Premiere.SelectPanel.Timeline)
         ;for reseting selection
 
-        SendInput(KS_Premiere.SelectPanel.EffectSettings)
+        SendInput(Premiere.SelectPanel.EffectSettings)
         SendInput("{tab}")
         sleep(33)
         SendInput("{Tab " WhichAttributes "}")

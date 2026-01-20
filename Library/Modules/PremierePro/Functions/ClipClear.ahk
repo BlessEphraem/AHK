@@ -3,7 +3,7 @@
 /**
  * @function ClipClear
  * Clears the attributes of the selected clip(s) assuming a predefined sequence of shortcuts.
- * NOTE: This function relies on external definitions: Panel.Focus and KS_Premiere.Attributes.Sub.
+ * NOTE: This function relies on external definitions: Panel.Focus and Premiere.Attributes.Sub.
  * @returns {void}
  */
 ClipClear() {
@@ -13,8 +13,8 @@ ClipClear() {
     sleep 33 ; Short delay to ensure focus change is complete.
     
     ; Send the hotkey/command sequence to open the 'Remove Attributes' or equivalent dialog.
-    ; KS_Premiere.Attributes.Sub is expected to contain the required shortcut (e.g., Alt+Shift+/)
-    Send(KS_Premiere.Attributes.Sub)
+    ; Premiere.Attributes.Sub is expected to contain the required shortcut (e.g., Alt+Shift+/)
+    Send(Premiere.Attributes.Sub)
     
     ; Send {Enter} to confirm the default action in the dialog (typically "OK" or "Apply"), 
     ; effectively clearing the default set of attributes.

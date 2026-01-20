@@ -167,9 +167,9 @@ NumpadDown::{
 }
 
 ^space::{
-    SendInput KS_Premiere.SelectPanel.Effects
+    SendInput Premiere.SelectPanel.Effects
     Sleep(200)
-    SendInput KS_Premiere.SearchBox
+    SendInput Premiere.SearchBox
     GUI_Debug.ReturnDebug "{Ctrl} + {Space}", "Focus 'Effects' then 'Search Box'", true
 }
 
@@ -301,8 +301,8 @@ F24::{
             *************************************************************************************/
 
 Media_Prev::{
-    SendInput(KS_Premiere.Clip.VolumeDown)
-    GUI_Debug.ReturnDebug "MACROPAD / {Media_Prev}", "SendInput(KS_Premiere.Clip.VolumeDown)", true
+    SendInput(Premiere.Clip.VolumeDown)
+    GUI_Debug.ReturnDebug "MACROPAD / {Media_Prev}", "SendInput(Premiere.Clip.VolumeDown)", true
 }
 
 Media_Play_Pause::{
@@ -311,8 +311,8 @@ Media_Play_Pause::{
 }
 
 Media_Next::{
-    SendInput(KS_Premiere.Clip.VolumeUp)
-    GUI_Debug.ReturnDebug "MACROPAD / {Media_Next}", "SendInput(KS_Premiere.Clip.VolumeUp)", true
+    SendInput(Premiere.Clip.VolumeUp)
+    GUI_Debug.ReturnDebug "MACROPAD / {Media_Next}", "SendInput(Premiere.Clip.VolumeUp)", true
 }
 
             /*************************************************************************************
@@ -320,20 +320,20 @@ Media_Next::{
             *************************************************************************************/
 
 Volume_Down::{
-    SendInput(KS_Premiere.Keyframe.Prev)
-    GUI_Debug.ReturnDebug "MACROPAD / {Volume_Down}", "SendInput(KS_Premiere.Keyframe.Prev)", true
+    SendInput(Premiere.Keyframe.Prev)
+    GUI_Debug.ReturnDebug "MACROPAD / {Volume_Down}", "SendInput(Premiere.Keyframe.Prev)", true
 }
 ^Volume_Down::{
-    SendInput(KS_Premiere.Keyframe.MorePrev)
-    GUI_Debug.ReturnDebug "MACROPAD / {CTRL} + {Volume_Down}", "SendInput(KS_Premiere.Keyframe.MorePrev)", true
+    SendInput(Premiere.Keyframe.MorePrev)
+    GUI_Debug.ReturnDebug "MACROPAD / {CTRL} + {Volume_Down}", "SendInput(Premiere.Keyframe.MorePrev)", true
 }
 Volume_Up::{
-    SendInput(KS_Premiere.Keyframe.Next)
-    GUI_Debug.ReturnDebug "MACROPAD / {Volume_Up}", "SendInput(KS_Premiere.Keyframe.Next)", true
+    SendInput(Premiere.Keyframe.Next)
+    GUI_Debug.ReturnDebug "MACROPAD / {Volume_Up}", "SendInput(Premiere.Keyframe.Next)", true
 }
 ^Volume_Up::{
-    SendInput(KS_Premiere.Keyframe.MoreNext)
-    GUI_Debug.ReturnDebug "MACROPAD / {CTRL} + {Volume_Up}", "SendInput(KS_Premiere.Keyframe.MoreNext)", true
+    SendInput(Premiere.Keyframe.MoreNext)
+    GUI_Debug.ReturnDebug "MACROPAD / {CTRL} + {Volume_Up}", "SendInput(Premiere.Keyframe.MoreNext)", true
 }
 Volume_Mute::{
     SendInput("{s}")
@@ -367,43 +367,43 @@ Browser_Forward::{
     PressedHotkey := [(Actions) => SendInput("{" ThisHotkey := CleanHotkey() "}")]
 
     Panel_UnderMouse := [(Actions) => (Mouse.FocusActive())]
-    Panel_Timeline := [(Actions) => SendInput(KS_Premiere.SelectPanel.Timeline)]
-    Panel_EffectControls := [(Actions) => SendInput(KS_Premiere.SelectPanel.EffectControls)]
-    Panel_Effect := [(Actions) => SendInput(KS_Premiere.SelectPanel.Effects)]
-    Panel_Player := [(Actions) => SendInput(KS_Premiere.SelectPanel.Player)]
+    Panel_Timeline := [(Actions) => SendInput(Premiere.SelectPanel.Timeline)]
+    Panel_EffectControls := [(Actions) => SendInput(Premiere.SelectPanel.EffectControls)]
+    Panel_Effect := [(Actions) => SendInput(Premiere.SelectPanel.Effects)]
+    Panel_Player := [(Actions) => SendInput(Premiere.SelectPanel.Player)]
 
-    Playhead_ToMouse := [(Actions) => SendInput(KS_Premiere.PlayheadToMouse)]
+    Playhead_ToMouse := [(Actions) => SendInput(Premiere.PlayheadToMouse)]
 
-    ZoomComp := [(Actions) => SendInput(KS_Premiere.Timeline.ZoomComp)]
-    ZoomOut := [(Actions) => SendInput(KS_Premiere.Timeline.ZoomOut)]
-    ZoomIn := [(Actions) => SendInput(KS_Premiere.Timeline.ZoomIn)]
-    ZoomFrame := [(Actions) => SendInput(KS_Premiere.Timeline.ZoomComp)]
+    ZoomComp := [(Actions) => SendInput(Premiere.Timeline.ZoomComp)]
+    ZoomOut := [(Actions) => SendInput(Premiere.Timeline.ZoomOut)]
+    ZoomIn := [(Actions) => SendInput(Premiere.Timeline.ZoomIn)]
+    ZoomFrame := [(Actions) => SendInput(Premiere.Timeline.ZoomComp)]
 
     Player_Fit := [(Actions) => (
-              SendInput(KS_Premiere.Player.Fit)
+              SendInput(Premiere.Player.Fit)
               Sleep(12)
-              SendInput(KS_Premiere.Player.Fit100)
+              SendInput(Premiere.Player.Fit100)
               Sleep(12)
-              SendInput(KS_Premiere.Player.Fit)
+              SendInput(Premiere.Player.Fit)
           )
     ]
-    Player_ZoomIn := [(Actions) => SendInput(KS_Premiere.Player.ZoomIn)]
-    Player_ZoomOut := [(Actions) => SendInput(KS_Premiere.Player.ZoomOut)]
+    Player_ZoomIn := [(Actions) => SendInput(Premiere.Player.ZoomIn)]
+    Player_ZoomOut := [(Actions) => SendInput(Premiere.Player.ZoomOut)]
 
-    KeyframeSelPrev := [(Actions) => SendInput(KS_Premiere.Keyframe.SelPrev)]
-    KeyframeSelNext := [(Actions) => SendInput(KS_Premiere.Keyframe.SelNext)]
-    KeyframePrev := [(Actions) => SendInput(KS_Premiere.Keyframe.Prev)]
-    KeyframeNext := [(Actions) => SendInput(KS_Premiere.Keyframe.Next)]
-    KeyframeMorePrev := [(Actions) => SendInput(KS_Premiere.Keyframe.MorePrev)]
-    KeyframeMoreNext := [(Actions) => SendInput(KS_Premiere.Keyframe.MoreNext)]
+    KeyframeSelPrev := [(Actions) => SendInput(Premiere.Keyframe.SelPrev)]
+    KeyframeSelNext := [(Actions) => SendInput(Premiere.Keyframe.SelNext)]
+    KeyframePrev := [(Actions) => SendInput(Premiere.Keyframe.Prev)]
+    KeyframeNext := [(Actions) => SendInput(Premiere.Keyframe.Next)]
+    KeyframeMorePrev := [(Actions) => SendInput(Premiere.Keyframe.MorePrev)]
+    KeyframeMoreNext := [(Actions) => SendInput(Premiere.Keyframe.MoreNext)]
 
     Show_Rulers :=
           (Actions) => (
-              SendInput(KS_Premiere.Player.ShowMargins)
+              SendInput(Premiere.Player.ShowMargins)
               Sleep(15)
-              SendInput(KS_Premiere.Player.ShowRulers)
+              SendInput(Premiere.Player.ShowRulers)
               Sleep(15)
-              SendInput(KS_Premiere.Player.ShowGuides)
+              SendInput(Premiere.Player.ShowGuides)
           )
 
     Open_Label := [ 
@@ -419,32 +419,32 @@ Browser_Forward::{
     Focus_SearchBox := [ 
           (Actions) => (
               Sleep(150)
-              SendInput(KS_Premiere.SearchBox)
+              SendInput(Premiere.SearchBox)
           )
     ]
 
     Tool_Hand := [
           (Actions) => (
-              SendInput(KS_Premiere.Tool.Hand)
+              SendInput(Premiere.Tool.Hand)
               SendInput("{LButton down}")
           )
     ] 
 
-    Tool_Razor := [(Actions) => (SendInput(KS_Premiere.Tool.Razor))]
-    Tool_Normal := [(Actions) => (SendInput(KS_Premiere.Tool.Normal))]
-    Tool_Slip := [(Actions) => (SendInput(KS_Premiere.Tool.Slip))]
-    Tool_Slide := [(Actions) => (SendInput(KS_Premiere.Tool.Slide))]
+    Tool_Razor := [(Actions) => (SendInput(Premiere.Tool.Razor))]
+    Tool_Normal := [(Actions) => (SendInput(Premiere.Tool.Normal))]
+    Tool_Slip := [(Actions) => (SendInput(Premiere.Tool.Slip))]
+    Tool_Slide := [(Actions) => (SendInput(Premiere.Tool.Slide))]
 
     Reset_LButton := [
           (Actions) => (
               SendInput("{LButton up}")
-              SendInput(KS_Premiere.Tool.Normal)
+              SendInput(Premiere.Tool.Normal)
           )
     ]
 
-    MarkersPrevious := [(Actions) => (SendInput(KS_Premiere.Markers.Previous))]
-    MarkersNext := [(Actions) => (SendInput(KS_Premiere.Markers.Next))]
-    MarkersYellow := [(Actions) => (SendInput(KS_Premiere.Markers.Add.Yellow))]
+    MarkersPrevious := [(Actions) => (SendInput(Premiere.Markers.Previous))]
+    MarkersNext := [(Actions) => (SendInput(Premiere.Markers.Next))]
+    MarkersYellow := [(Actions) => (SendInput(Premiere.Markers.Add.Yellow))]
 
 
 /**

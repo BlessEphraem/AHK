@@ -5,7 +5,7 @@
  * Provides methods for controlling and manipulating the 'Motion' effect properties
  * within the Effect Controls panel in Adobe Premiere Pro, primarily using image and pixel searching.
  * NOTE: Relies heavily on external functions/classes like Panel.ClassNN, FileNameConstructor, 
- * FindImage, fpath.ImageSearch, KS_Premiere, and WaitForUserConfirm.
+ * FindImage, fpath.ImageSearch, Premiere, and WaitForUserConfirm.
  */
 class Motion{
     /**
@@ -43,9 +43,9 @@ class Motion{
             attempts--
             sleep 5
             ; Toggle "Selection Follows Playhead" to try and refresh the panel content/selection.
-            SendInput KS_Premiere.Timeline.Selection_Follow_Playhead
+            SendInput Premiere.Timeline.Selection_Follow_Playhead
             sleep 5
-            SendInput KS_Premiere.Timeline.Selection_Follow_Playhead
+            SendInput Premiere.Timeline.Selection_Follow_Playhead
             if attempts = 0 {
                 MsgBox("Failed : Make sure you got a Target Track active `n with a layer under playhead", Err)
                 Exit
@@ -171,7 +171,7 @@ class Motion{
         MouseGetPos &xStart, &yStart ; Save starting mouse position.
         
         ; Send the hotkey to activate the Transform overlay in the Program Monitor (if defined).
-        SendInput KS_Premiere.Player.Transform
+        SendInput Premiere.Player.Transform
         BlockInput "MouseMove" ; Block user mouse movement during search and setup.
         
         ; Find the location of the target property bar (e.g., Position).
@@ -188,7 +188,7 @@ class Motion{
         if !FindColor{
             attempts--
             if attempts = 0 {
-                SendInput KS_Premiere.Player.Transform ; Deactivate the Transform tool.
+                SendInput Premiere.Player.Transform ; Deactivate the Transform tool.
                 BlockInput("MouseMoveOff")
                 MsgBox("Failed : FindColor Not Found", Err)
                 Exit
@@ -211,7 +211,7 @@ class Motion{
             WaitForUserConfirm("Enter", "Escape", "LButton", "RButton", "MButton")
             
             ; Toggle the Transform tool off.
-            SendInput KS_Premiere.Player.Transform
+            SendInput Premiere.Player.Transform
             Sleep(100)
             
             ; Release the mouse button (if still held down from the Click "Down" command)

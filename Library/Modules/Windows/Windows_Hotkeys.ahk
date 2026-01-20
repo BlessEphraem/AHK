@@ -5,7 +5,6 @@
 **/
 
 /*
-
 Some windows default hotkey are awfull and useless.
 Like if you do in this right order :
 
@@ -23,8 +22,23 @@ REG ADD HKCU\Software\Classes\ms-officeapp\Shell\Open\Command /t REG_SZ /d rundl
     Not harmfull at all, will only remove
     THIS microsoft shortcut DEFINITELY.
     Be sure before doing so.
-
 */
+
+    Hold := [(Actions) => Sleep(10)]
+    PressedHotkey := [(Actions) => SendInput("{" ThisHotkey := CleanHotkey() "}")]
+
+    ClipSlotCopy_1 := [(Actions) => ClipSlot.Write(1)]
+    ClipSlotCopy_2 := [(Actions) => ClipSlot.Write(2)]
+    ClipSlotCopy_3 := [(Actions) => ClipSlot.Write(3)]
+    ClipSlotCopy_4 := [(Actions) => ClipSlot.Write(4)]
+
+    ClipSlotPaste_1 := [(Actions) => ClipSlot.Paste(1)]
+    ClipSlotPaste_2 := [(Actions) => ClipSlot.Paste(2)]
+    ClipSlotPaste_3 := [(Actions) => ClipSlot.Paste(3)]
+    ClipSlotPaste_4 := [(Actions) => ClipSlot.Paste(4)]
+
+
+;Numpad1::HandleKeyGestures(ClipSlotPaste_1, , ClipSlotCopy_1)
 
 /** 
 ##############################################
@@ -35,8 +49,10 @@ REG ADD HKCU\Software\Classes\ms-officeapp\Shell\Open\Command /t REG_SZ /d rundl
 ; Disable Alt Acceleration Menu
 ~LAlt::SendInput("{Blind}{vkE8}")
 
-; Replace Windows StartMenu with Flow Launcher
-~LWin::StartMenu.Replace("Z:\Scripts\Tools\externals\FlowLauncher\Flow.Launcher.exe")
+;~LWin::LWin
+
+; Replace Windows StartMenu with Flow Launcher. Can be any command.
+;LWin up::StartMenu.Replace("Z:\Scripts\Tools\_externals\FlowLauncher\Flow.Launcher.exe")
 
 /** 
 ##############################################
@@ -69,13 +85,11 @@ REG ADD HKCU\Software\Classes\ms-officeapp\Shell\Open\Command /t REG_SZ /d rundl
         Application_Class.Obsidian.path
     )
 
-²::²
-² & &::CMD("komorebic focus-workspace 0")
-² & é::CMD("komorebic focus-workspace 1")
-² & "::CMD("komorebic focus-workspace 2")
-² & '::CMD("komorebic focus-workspace 3")
-² & (::CMD("komorebic focus-workspace 4")
-
+#Numpad0::CMD("komorebic focus-workspace 0")
+#Numpad1::CMD("komorebic focus-workspace 1")
+#Numpad2::CMD("komorebic focus-workspace 2")
+#Numpad3::CMD("komorebic focus-workspace 3")
+#Numpad4::CMD("komorebic focus-workspace 4")
 
 #space::{
     Language.Switch("fr", "en")
@@ -83,7 +97,7 @@ REG ADD HKCU\Software\Classes\ms-officeapp\Shell\Open\Command /t REG_SZ /d rundl
 }
 
 #²::{
-    Terminal("Deepr Terminal", "wt.exe", 3, 1200, 850, 300)
+    Terminal("Deepr Terminal", "wt.exe", 3, 1200, 850, "onToggle", 300)
     GUI_Debug.ReturnDebug A_ThisHotkey, "Terminal() => Run/Focus Deepr Terminal", true
 }
 
@@ -107,15 +121,35 @@ REG ADD HKCU\Software\Classes\ms-officeapp\Shell\Open\Command /t REG_SZ /d rundl
     GUI_Debug.ReturnDebug A_ThisHotkey, "Komorebic() => 'retile'", true
 }
 
-+#left::{
-    CMD("komorebic cycle-send-to-workspace previous")
-    GUI_Debug.ReturnDebug A_ThisHotkey, "Komorebic() => 'focus left'", true
+#left::{
+    CMD("komorebic cycle-move previous")
+    GUI_Debug.ReturnDebug A_ThisHotkey, "Komorebic() => 'Move window PREV'", true
 }
 
-+#right::{
-    CMD("komorebic cycle-send-to-workspace next")
-    GUI_Debug.ReturnDebug A_ThisHotkey, "Komorebic() => 'focus right'", true
+    #^left::{
+        CMD("komorebic cycle-move-to-monitor previous")
+        GUI_Debug.ReturnDebug A_ThisHotkey, "Komorebic() => 'Move to PREV Monitor'", true
+    }
+
+        #!left::{
+            CMD("komorebic cycle-move-to-workspace previous")
+            GUI_Debug.ReturnDebug A_ThisHotkey, "Komorebic() => 'Move to PREV Workspace'", true
+        }
+
+#right::{
+    CMD("komorebic cycle-move next")
+    GUI_Debug.ReturnDebug A_ThisHotkey, "Komorebic() => 'Move window NEXT'", true
 }
+
+    #^right::{
+        CMD("komorebic cycle-move-to-monitor next")
+        GUI_Debug.ReturnDebug A_ThisHotkey, "Komorebic() => 'Move to NEXT Monitor'", true
+    }
+
+        #!right::{
+            CMD("komorebic cycle-move-to-workspace next")
+            GUI_Debug.ReturnDebug A_ThisHotkey, "Komorebic() => 'Move to NEXT Workspace'", true
+        }
 
 #b:: {
     resolutions := [[810, 1440], [1920, 1080], [1400, 1400]]
@@ -146,8 +180,10 @@ REG ADD HKCU\Software\Classes\ms-officeapp\Shell\Open\Command /t REG_SZ /d rundl
 
     WinMove(posX, posY, targetW, targetH, hwnd)
 }
-/**
 
+
+
+/**
 #c:: {
 hwnd := WinActive("A")
 if !hwnd
@@ -167,7 +203,8 @@ posY := (screenH - winH) // 2
 ; Appliquer le déplacement sans redimensionnement
 WinMove(posX, posY, , , hwnd)
 }
- */
+*/
+
 
 
 /** 
@@ -186,26 +223,30 @@ WinMove(posX, posY, , , hwnd)
     GUI_Debug.ReturnDebug "{Alt} + {MButton}", "WindowResizer()", true
 }
 
+
+
 ;@_WheelLeft
 F13::{
     CMD("komorebic cycle-move next")
     GUI_Debug.ReturnDebug "{WheelLeft} := {F13}", true
 }
 
-!F13::{
-    CMD("komorebic resize-axis horizontal decrease")
-    GUI_Debug.ReturnDebug "{WheelLeft} := {F13}", true
-}
+    !F13::{
+        CMD("komorebic resize-axis horizontal decrease")
+        GUI_Debug.ReturnDebug "{WheelLeft} := {F13}", true
+    }
 
 ;@_WheelRight
 F14::{
     CMD("komorebic cycle-move previous")
     GUI_Debug.ReturnDebug "{WheelRight} := {F14}", true
 }
-!F14::{
-    CMD("komorebic resize-axis horizontal increase")
-    GUI_Debug.ReturnDebug "{WheelRight} := {F14}", true
-}
+
+    !F14::{
+        CMD("komorebic resize-axis horizontal increase")
+        GUI_Debug.ReturnDebug "{WheelRight} := {F14}", true
+    }
+
 
 
 XButton1::{
@@ -213,15 +254,15 @@ XButton1::{
     GUI_Debug.ReturnDebug "{XButton1}", "SendInput() => {Delete}", true
 }
 
-^XButton1::{
-    SendInput("^{Delete}")
-    GUI_Debug.ReturnDebug "{Ctrl} + {XButton1}", "SendInput() => ^{Delete}", true
-}
+    ^XButton1::{
+        SendInput("^{Delete}")
+        GUI_Debug.ReturnDebug "{Ctrl} + {XButton1}", "SendInput() => ^{Delete}", true
+    }
 
-+XButton1::{
-    SendInput("+{Delete}")
-    GUI_Debug.ReturnDebug "{Shift} + {XButton1}", "SendInput() => +{Delete}", true
-}
+        +XButton1::{
+            SendInput("+{Delete}")
+            GUI_Debug.ReturnDebug "{Shift} + {XButton1}", "SendInput() => +{Delete}", true
+        }
 
 
 
@@ -230,22 +271,25 @@ XButton2::{
     GUI_Debug.ReturnDebug "{XButton2}", "SendInput() => {Enter}", true
 }
 
-^XButton2::{
-    SendInput("^{Enter}")
-    GUI_Debug.ReturnDebug "{Ctrl} + {XButton2}", "SendInput() => ^{Enter}", true
-}
+    ^XButton2::{
+        SendInput("^{Enter}")
+        GUI_Debug.ReturnDebug "{Ctrl} + {XButton2}", "SendInput() => ^{Enter}", true
+    }
+
+        +XButton2::{
+            SendInput("+{Enter}")
+            GUI_Debug.ReturnDebug "{Shift} + {XButton2}", "SendInput() => +{Enter}", true
+        }
 
 
-+XButton2::{
-    SendInput("+{Enter}")
-    GUI_Debug.ReturnDebug "{Shift} + {XButton2}", "SendInput() => +{Enter}", true
-}
 
 /** 
 ##############################################
 #                @MXGESTURES                 #
 ##############################################
 **/
+
+
 
 /**
 @NOTES
@@ -257,6 +301,8 @@ I don't like it, so I decided to use F13 and F14.
 If you have some problem with using these, because it open a f*cking office page,
 go see @README at the top page.
 **/
+
+
 
 ; Move windows across workspaces
 ;@_MXGestureLeft
@@ -309,8 +355,6 @@ Appskey::{
 
 
 
-
-
 /** 
 ##############################################
 #                  @KEYPAD                   #
@@ -332,13 +376,13 @@ Browser_Home::{
 
 ;@_PadKey2
 Browser_Favorites::{
-    Application.Window(Application_Class.Explorer.winClass, "Z:\Workspace\Productions\Premiere Pro\.Watchfolder", false)
+    Application.Window(Application_Class.Explorer.winClass, "Z:\Workspace\Renders\Watchfolder", false)
     GUI_Debug.ReturnDebug "{PadKey2} => {Browser_Favorites}", "Application.Window() => 'Z:\Workspace\Productions\Premiere Pro\.Watchfolder'", true
 }
 
 ;@_PadKey3
 Browser_Search::{
-    Application.Window(Application_Class.Explorer.winClass, "Z:\Workspace\Productions\Premiere Pro\.Renders", false)
+    Application.Window(Application_Class.Explorer.winClass, "Z:\Workspace\Renders", false)
     GUI_Debug.ReturnDebug "{PadKey3} => {Browser_Search}", "Application.Window() => 'Z:\Workspace\Productions\Premiere Pro\.Renders'", true
 }
 
@@ -347,6 +391,7 @@ Browser_Refresh::{
     Application.Window(Application_Class.Explorer.winClass, "Z:\Workspace\Productions\Premiere Pro\Sessions", false)
     GUI_Debug.ReturnDebug "{PadKey4} => {Browser_Refresh}", "Application.Window() => 'Z:\Workspace\Productions\Premiere Pro\Sessions'", true
 }
+
 
 
 /*
@@ -459,14 +504,14 @@ F24::{
     }
 }
 
-/** 
+/**
 ##############################################
 #            @KEYPAD_SMALLWHEEL1             #
 ##############################################
 **/
 
 Media_Prev::{
-    Volume.Change("ChangeAppVolume", "Arc.exe", -0.02, "Z:\Scripts\Tools\externals\nircmd.exe")
+    Volume.Change("ChangeAppVolume", "Arc.exe", -0.02, "Z:\Scripts\Tools\_externals\nircmd.exe")
     GUI_Debug.ReturnDebug "{PadSmallWheel1 Left} => {Media_Prev}", "Volume.Change() => Arc -2%", true
 }
 
@@ -487,7 +532,7 @@ Media_Play_Pause::{
 
 Media_Next::{
 
-    Volume.Change("ChangeAppVolume", "Arc.exe", +0.02, "Z:\Scripts\Tools\externals\nircmd.exe")
+    Volume.Change("ChangeAppVolume", "Arc.exe", +0.02, "Z:\Scripts\Tools\_externals\nircmd.exe")
 
     GUI_Debug.ReturnDebug "{PadSmallWheel1 Right} => {Media_Next}", "Volume.Change() => Arc +2%", true
 }
@@ -499,16 +544,18 @@ Media_Next::{
 **/
 
 Browser_Back::{
-    GUI_Debug.ReturnDebug "{PadSmallWheel2 Left} => {Browser_Back}", "NONE", true
+    Volume.Change("ChangeAppVolume", "discord.exe", -0.02, "Z:\Scripts\Tools\_externals\nircmd.exe")
+    GUI_Debug.ReturnDebug "{PadSmallWheel2 Left} => {Browser_Back}", "changeappvolume discord.exe -0.1", true
 }
 
 Browser_Stop::{
     SendInput("{Browser_Stop}")
-    GUI_Debug.ReturnDebug "{PadSmallWheel2 Pressed} => {Browser_Stop}", "SendInput() => {Browser_Stop}", true
+    GUI_Debug.ReturnDebug "{PadSmallWheel2 Pressed} => {Browser_Stop}", "changeappvolume discord.exe -0.1", true
 }
 
 Browser_Forward::{
-    GUI_Debug.ReturnDebug "{PadSmallWheel2 Right} => {Browser_Forward}", "NONE", true
+    Volume.Change("ChangeAppVolume", "discord.exe", +0.02, "Z:\Scripts\Tools\_externals\nircmd.exe")
+    GUI_Debug.ReturnDebug "{PadSmallWheel2 Right} => {Browser_Forward}", "changeappvolume discord.exe +0.1", true
 }
 
 /** 
@@ -533,38 +580,39 @@ Volume_Up::{
 }
 
 
-;List of most useless key
-;1 = used by mouse
-;2 = used by macropad
-;0 = not used
+;   List of most useless key
+;   1 = used by mouse
+;   2 = used by macropad
+;   0 = not used
 
-;   Browser_Back                 |   2
-;   Browser_Forward              |   2
-;   Browser_Refresh              |   2
-;   Browser_Stop                 |   2
-;   Browser_Search               |   2
-;   Browser_Favorites            |   2
-;   Browser_Home                 |   2
+;   NAME                         | USED? | Logitech Detected ? 
+;   Browser_Back                 |   2   |  X
+;   Browser_Forward              |   2   |  X
+;   Browser_Refresh              |   2   |  X
+;   Browser_Stop                 |   2   |  X
+;   Browser_Search               |   2   |  X
+;   Browser_Favorites            |   2   |  X
+;   Browser_Home                 |   2   |  X
 
-;   Volume_Mute                  |   2
-;   Volume_Down                  |   2
-;   Volume_Up                    |   2
+;   Volume_Mute                  |   2   |  X
+;   Volume_Down                  |   2   |  X
+;   Volume_Up                    |   2   |  X
 
-;   Media_Next                   |   2
-;   Media_Prev                   |   2
-;   Media_Play_Pause             |   2
-;   Media_Stop                   |   0
+;   Media_Next                   |   2   |  X
+;   Media_Prev                   |   2   |  X
+;   Media_Play_Pause             |   2   |  X
+;   Media_Stop                   |   0   |  X
 
-;   Launch_Mail                  |   0
-;   Launch_Media                 |   0
-;   Launch_App1                  |   0
-;   Launch_App2                  |   0
+;   Launch_Mail                  |   0   |  X
+;   Launch_Media                 |   0   |  X
+;   Launch_App1                  |   0   |  N
+;   Launch_App2                  |   0   |  N
 
-;   Help                         |   0    
-;   AppsKey                      |   1
-;   PrintScreen                  |   0
-;   CtrlBreak                    |   0
-;   Pause                        |   0
+;   Help                         |   0   |  N
+;   AppsKey                      |   0   |  X
+;   PrintScreen                  |   0   |  X
+;   CtrlBreak                    |   0   |  N
+;   Pause                        |   0   |  N
 
-;Very hard to use key (bc it probably doesn't exist on most keyboards.)
+; Very hard to use key (bc it probably doesn't exist on most keyboards.)
 ;   Sleep

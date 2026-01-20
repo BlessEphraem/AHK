@@ -1,14 +1,14 @@
 ; Custom Class made for hotkeys in Premiere Pro.
 ; All hotkeys that you use in Premiere Pro, must be assigned there.
 
-class KS_Premiere {
+class Premiere {
 
     static Excalibur := "^{Space}"
     
     static SelectPanel := {
+        Bin: "{F1}",
         EffectControls: "{F2}",
         Properties: "{F3}",
-        Bin: "{F1}",
         Effects: "{F4}",
         Player: '{F7}',
         Timeline: "{F8}",

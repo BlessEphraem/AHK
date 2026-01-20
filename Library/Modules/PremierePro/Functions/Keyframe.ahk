@@ -10,38 +10,38 @@ class Keyframe {
         Switch action {
             Case 'Add': Switch choice
                 {
-                    Case 'Video': return SelChoice := KS_Premiere.Keyframe.Perform.Video.Add
-                    Case 'Audio': return SelChoice := KS_Premiere.Keyframe.Perform.Audio.Add
+                    Case 'Video': return SelChoice := Premiere.Keyframe.Perform.Video.Add
+                    Case 'Audio': return SelChoice := Premiere.Keyframe.Perform.Audio.Add
                 }
 
             Case 'Remove': Switch choice
                 {
-                    Case 'Video': return SelChoice := KS_Premiere.Keyframe.Perform.Video.Del
-                    Case 'Audio': return SelChoice := KS_Premiere.Keyframe.Perform.Audio.Del
+                    Case 'Video': return SelChoice := Premiere.Keyframe.Perform.Video.Del
+                    Case 'Audio': return SelChoice := Premiere.Keyframe.Perform.Audio.Del
                 }
 
             Case 'Select': Switch choice
                 {
-                    Case 'Next': return SelChoice := KS_Premiere.Keyframe.SelNext
-                    Case 'Prev': return SelChoice := KS_Premiere.Keyframe.SelPrev
+                    Case 'Next': return SelChoice := Premiere.Keyframe.SelNext
+                    Case 'Prev': return SelChoice := Premiere.Keyframe.SelPrev
                 }
 
             Case 'Move': Switch choice
                 {
                     Case 'Video': Switch subchoice
                         {
-                            Case '+1f': return SelChoice := KS_Premiere.Keyframe.Move.Video.Forw.1
-                            Case '+10f': return SelChoice := KS_Premiere.Keyframe.Move.Video.Forw.10
-                            Case '-1f': return SelChoice := KS_Premiere.Keyframe.Move.Video.Back.1
-                            Case '-10f': return SelChoice := KS_Premiere.Keyframe.Move.Video.Back.10
+                            Case '+1f': return SelChoice := Premiere.Keyframe.Move.Video.Forw.1
+                            Case '+10f': return SelChoice := Premiere.Keyframe.Move.Video.Forw.10
+                            Case '-1f': return SelChoice := Premiere.Keyframe.Move.Video.Back.1
+                            Case '-10f': return SelChoice := Premiere.Keyframe.Move.Video.Back.10
                         }
 
                     Case 'Audio': Switch subchoice
                         {
-                            Case '+1f': return SelChoice := KS_Premiere.Keyframe.Move.Audio.Forw.1
-                            Case '+10f': return SelChoice := KS_Premiere.Keyframe.Move.Audio.Forw.10
-                            Case '-1f': return SelChoice := KS_Premiere.Keyframe.Move.Audio.Back.1
-                            Case '-10f': return SelChoice := KS_Premiere.Keyframe.Move.Audio.Back.10
+                            Case '+1f': return SelChoice := Premiere.Keyframe.Move.Audio.Forw.1
+                            Case '+10f': return SelChoice := Premiere.Keyframe.Move.Audio.Forw.10
+                            Case '-1f': return SelChoice := Premiere.Keyframe.Move.Audio.Back.1
+                            Case '-10f': return SelChoice := Premiere.Keyframe.Move.Audio.Back.10
                         }
                 }
             Case 'Default':
