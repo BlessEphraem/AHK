@@ -49,11 +49,6 @@ REG ADD HKCU\Software\Classes\ms-officeapp\Shell\Open\Command /t REG_SZ /d rundl
 ; Disable Alt Acceleration Menu
 ~LAlt::SendInput("{Blind}{vkE8}")
 
-;~LWin::LWin
-
-; Replace Windows StartMenu with Flow Launcher. Can be any command.
-;LWin up::StartMenu.Replace("Z:\Scripts\Tools\_externals\FlowLauncher\Flow.Launcher.exe")
-
 /** 
 ##############################################
 #                 @KEYBOARD                  #
@@ -181,8 +176,6 @@ REG ADD HKCU\Software\Classes\ms-officeapp\Shell\Open\Command /t REG_SZ /d rundl
     WinMove(posX, posY, targetW, targetH, hwnd)
 }
 
-
-
 /**
 #c:: {
 hwnd := WinActive("A")
@@ -207,7 +200,7 @@ WinMove(posX, posY, , , hwnd)
 
 
 
-/** 
+/**
 ##############################################
 #                   @MOUSE                   #
 ##############################################
